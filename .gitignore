@@ -1,0 +1,16 @@
+# Archivos de compilación
+bin/
+obj/
+publish/
+
+# Configuración del usuario
+*.user
+*.suo
+*.cache
+*.log
+
+# Archivos temporales y otros
+*.tmp
+*.pdb
+*.exe
+*.dll

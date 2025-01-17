@@ -1,0 +1,172 @@
+CREATE TABLE IF NOT EXISTS customers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50),
+    telefono VARCHAR(20),
+    tipo_dispositivo VARCHAR(50),
+    marca VARCHAR(50),
+    modelo VARCHAR(50),
+    estatus VARCHAR(20),
+    fecha_entregar DATETIME,
+    motivo VARCHAR (100),
+    persona_recibio VARCHAR(50),
+    fecha_recibido DATETIME,
+    persona_reparo VARCHAR(50),
+    diagnostico VARCHAR (500),
+    fecha_reparado DATETIME,
+    costo INT
+);
+
+
+CREATE TABLE IF NOT EXISTS person (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(50),
+	telefono VARCHAR(50),
+	salario DECIMAL(10, 2),
+	lunes DECIMAL(10, 2),
+	martes DECIMAL(10, 2),
+	miercoles DECIMAL(10, 2),
+	jueves DECIMAL(10, 2),
+	viernes DECIMAL(10, 2),
+	sabado DECIMAL(10, 2),
+	domingo DECIMAL(10, 2)
+);
+
+CREATE TABLE IF NOT EXISTS report (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fechaInicio DATE,
+    fechaFin DATE,
+    ingresoTotal DECIMAL(10, 2),
+    salarios DECIMAL(10, 2),
+    manoDeObra DECIMAL(10, 2),
+    ganancia DECIMAL(10, 2),
+    refacciones DECIMAL (10, 2)
+);
+
+-------------------------------------Alters-----------------------------------
+ALTER TABLE customers 
+MODIFY COLUMN nombre VARCHAR(50),
+MODIFY COLUMN telefono VARCHAR(20),
+MODIFY COLUMN tipo_dispositivo VARCHAR(50),
+MODIFY COLUMN marca VARCHAR(50),
+MODIFY COLUMN modelo VARCHAR(50),
+MODIFY COLUMN estatus VARCHAR(20),
+MODIFY COLUMN fecha_entregar DATETIME,
+MODIFY COLUMN motivo VARCHAR(100),
+MODIFY COLUMN persona_recibio VARCHAR(50),
+MODIFY COLUMN fecha_recibido DATETIME,
+MODIFY COLUMN persona_reparo VARCHAR(50),
+MODIFY COLUMN diagnostico VARCHAR(500),
+MODIFY COLUMN fecha_reparado DATETIME,
+MODIFY COLUMN costo INT;
+ 
+ALTER TABLE person 
+MODIFY COLUMN nombre VARCHAR(50),
+MODIFY COLUMN telefono VARCHAR(50),
+MODIFY COLUMN salario DECIMAL(10, 2);
+
+ALTER TABLE report 
+MODIFY COLUMN fechaInicio DATE,
+MODIFY COLUMN fechaFin DATE,
+MODIFY COLUMN ingresoTotal DECIMAL(10, 2),
+MODIFY COLUMN salarios DECIMAL(10, 2),
+MODIFY COLUMN manoDeObra DECIMAL(10, 2),
+MODIFY COLUMN ganancia DECIMAL(10, 2),
+MODIFY COLUMN refacciones DECIMAL(10, 2);
+
+----------------------------------------eventos------------------------------------
+
+
+SET GLOBAL event_scheduler = ON;
+
+SELECT * FROM information_schema.EVENTS WHERE EVENT_NAME = 'update_status_to_atrasado';
+DELIMITER //
+
+CREATE EVENT IF NOT EXISTS update_status_to_atrasado
+ON SCHEDULE EVERY 1 MINUTE
+DO
+BEGIN
+    UPDATE customers
+    SET estatus = 'ATRASADO'
+    WHERE estatus = 'PENDIENTE' AND NOW() > fecha_entregar;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE EVENT IF NOT EXISTS create_weekly_report
+ON SCHEDULE EVERY 1 WEEK
+STARTS '2024-09-16 00:00:00' -- El próximo lunes que empieza el evento
+DO
+BEGIN
+    DECLARE fechaInicio DATE;
+    DECLARE fechaFin DATE;
+    
+    -- Calcular la fecha de inicio (lunes de la semana actual)
+    SET fechaInicio = CURRENT_DATE() - INTERVAL (DAYOFWEEK(CURRENT_DATE()) - 2) DAY;
+
+    -- Calcular la fecha de fin (domingo de la misma semana)
+    SET fechaFin = fechaInicio + INTERVAL 6 DAY;
+
+    -- Insertar los valores en la tabla report con valores iniciales de 0.00
+    INSERT INTO report (fechaInicio, fechaFin, ingresoTotal, salarios, ganancia)
+    VALUES (fechaInicio, fechaFin, 0.00, 0.00, 0.00);
+
+    -- Restablecer los salarios a 0.00 en todos los registros de la tabla person
+    UPDATE person
+    SET salario = 0.00;
+    
+END //
+
+DELIMITER ;
+
+---------------------------------------------------Agregar nuevas columnas si no existe----------------------------------
+ALTER TABLE customers ADD COLUMN nueva_columna TIPO_DE_DATO;
+ALTER TABLE customers DROP COLUMN nombre_columna;
+
+
+
+
+
+
+
+
+
+
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+
+[Icons]
+Name: "{commondesktop}\Tecknogadged"; Filename: "{app}\Tecknogadged.exe"; Tasks: desktopicon
+[Setup]
+; Nombre de la aplicación
+AppName=Tecknogadged
+; Versión de la aplicación
+AppVersion=1.0
+; Carpeta de salida del instalador
+OutputDir=Output
+; Nombre del archivo del instalador
+OutputBaseFilename=TecknogadgedSetup
+; Carpeta de instalación predeterminada
+DefaultDirName={pf}\Tecknogadged
+; Nombre del grupo de programas
+DefaultGroupName=Tecknogadged
+; Icono del instalador (opcional)
+; SetupIconFile=icono.ico
+; Idioma del instalador
+LanguageDetectionMethod=UILanguage
+
+[Files]
+; Archivos a incluir en el instalador
+Source: "bin\Release\net8.0-windows\win-x64\publish\Tecknogadged.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Release\net8.0-windows\win-x64\publish\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+[Icons]
+; Crear accesos directos
+Name: "{group}\Tecknogadged"; Filename: "{app}\Tecknogadged.exe"
+Name: "{commondesktop}\Tecknogadged"; Filename: "{app}\Tecknogadged.exe"; Tasks: desktopicon
+
+[Run]
+; Ejecutar la aplicación después de la instalación
+Filename: "{app}\Tecknogadged.exe"; Description: "{cm:LaunchProgram,Tecknogadged}"; Flags: nowait postinstall skipifsilent
