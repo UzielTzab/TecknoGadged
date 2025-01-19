@@ -2099,8 +2099,8 @@ namespace TecnogadgedWin7
                         string password = dbConnect.password;
 
                         // Ruta completa al ejecutable mysqldump
-                        string mysqldumpPath = @"C:\Program Files\MariaDB 11.4\bin\mysqldump.exe"; // Ajusta esta ruta según tu instalación
-
+                        // string mysqldumpPath = @"C:\Program Files\MariaDB 11.4\bin\mysqldump.exe"; // Ajusta esta ruta según tu instalación
+                        string mysqldumpPath = @"C:\Program Files\MariaDB 10.5\bin\mysqldump.exe";
                         // Comando para respaldar la base de datos
                         string backupCommand = $"\"{mysqldumpPath}\" --user={user} --password={password} --host={server} {database} --result-file=\"{backupFilePath}\"";
 

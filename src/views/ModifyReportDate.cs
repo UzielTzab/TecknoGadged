@@ -5,7 +5,6 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 using System.Drawing.Printing;
-using FontAwesome.Sharp; // Asegúrate de tener FontAwesome.Sharp como referencia
 
 namespace TecnogadgedWin7
 {
