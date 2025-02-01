@@ -29,7 +29,7 @@ public class DbConnect
         user = "root";
         password = "225699Uz";
         port = "3308";
-        String connString = "Server=" + server + ";Database=" + database + ";port=" + port + ";User Id=" + user + ";password=" + password;
+        String connString = "Server=" + server + ";Database=" + database + ";port=" + port + ";User Id=" + user + ";password=" + password + ";charset=utf8mb4;";
         connection = new MySqlConnection(connString);
     }
     public MySqlConnection Connection
