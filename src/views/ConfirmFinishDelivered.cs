@@ -284,11 +284,11 @@ namespace TecnogadgedWin7
             leftPanel.Controls.Add(horaRecibidoSubtitle);
 
             Label horaRecibidoLabel = new Label();
-            horaRecibidoLabel.Text = fechaHora[1];
             DateTime hora;
             if (DateTime.TryParse(fechaHora[1], out hora))
             {
-                horaRecibidoLabel.Text = hora.ToString("hh:mm tt"); // Formato de 12 horas con AM/PM
+                string amPm = hora.Hour >= 12 ? "PM" : "AM"; // Determinar "AM" o "PM"
+                horaRecibidoLabel.Text = hora.ToString("hh:mm", new System.Globalization.CultureInfo("es-ES")) + " " + amPm; // Formato de 12 horas con AM/PM
             }
             else
             {
