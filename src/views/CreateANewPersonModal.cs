@@ -125,8 +125,8 @@ namespace TecnogadgedWin7
 
                 DbConnect dbConnect = new DbConnect();
                 //Query para insertar datos en la tabla
-                String query = "INSERT INTO person (nombre, telefono, salario, lunes, martes, miercoles, jueves, viernes, sabado, domingo) " +
-                               "VALUES ('" + name.Text + "', '" + phone.Text + "', 0, 0, 0, 0, 0, 0, 0, 0)";
+                String query = "INSERT INTO employees (nombre) " +
+                               "VALUES ('" + name.Text + "')";
                 dbConnect.ExecuteQuery(query);
                 // Obtener el valor del filtro desde la clase MainForm
                 string filterValue = mainForm.GetFilterValue();
@@ -135,7 +135,7 @@ namespace TecnogadgedWin7
                 MessageBox.Show("Registro de empleado exitoso", "Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
-                mainForm.GetPersonalNames();
+                mainForm.GetEmplooyesNamesOnSelector();
                 CloseModal(sender, e);
             }
             catch (Exception ex)

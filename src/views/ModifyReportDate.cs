@@ -196,7 +196,7 @@ namespace TecnogadgedWin7
 
                         // Llamar a un método del formulario principal para actualizar la tabla de reportes, si es necesario
                         DateTime searchDate = mainForm.searchDatePicker.Value;
-                        mainForm.GetAllReportsFunction(); // Asegúrate de que este método exista en Form1
+                        // mainForm.GetAllReportsFunction(); // Asegúrate de que este método exista en Form1
                         Hide();
                     }
                     else

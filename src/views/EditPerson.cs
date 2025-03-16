@@ -133,7 +133,7 @@ namespace TecnogadgedWin7
                 }
 
                 MessageBox.Show("Nombre del empleado actualizado con éxito", "Actualización", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                mainForm.GetPersonalNames(); // Actualizar la lista de nombres de empleados
+                mainForm.GetEmplooyesNamesOnSelector(); // Actualizar la lista de nombres de empleados
                 CloseModal(sender, e); // Cerrar el modal después de la actualización
             }
             catch (Exception ex)

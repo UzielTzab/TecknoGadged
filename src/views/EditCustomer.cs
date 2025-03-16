@@ -11,7 +11,6 @@ namespace TecnogadgedWin7
     public partial class EditCustomer : Form
     {
         private Form1 mainForm;
-
         private string Nombre;
         private string telefono;
         private string marca;
@@ -20,19 +19,20 @@ namespace TecnogadgedWin7
         private string fecha;
         private string hora;
         private string status;
+        private string comment;
 
         private TextBox name = new TextBox();
         private TextBox phone = new TextBox();
         private TextBox brand = new TextBox();
         private TextBox model = new TextBox();
         private TextBox reason = new TextBox();
-
+        private TextBox commentBox = new TextBox(); // Nuevo campo para comentarios
 
         private DateTimePicker datePicker = new DateTimePicker();
         private DateTimePicker timePicker = new DateTimePicker();
 
 
-        public EditCustomer(Form1 form, string Nombre, string telefono, string marca, string modelo, string motivo, string fecha, string hora, string status)
+        public EditCustomer(Form1 form, string Nombre, string telefono, string marca, string modelo, string motivo, string fecha, string hora, string status, string comment)
         {
             this.Nombre = Nombre;
             this.telefono = telefono;
@@ -42,8 +42,7 @@ namespace TecnogadgedWin7
             this.fecha = fecha;
             this.hora = hora;
             this.status = status;
-
-
+            this.comment = comment;
 
             InitializeComponent();
             mainForm = form;
@@ -51,8 +50,7 @@ namespace TecnogadgedWin7
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Size = new Size(550, 500);
-
+            this.Size = new Size(550, 750); // Ajusté el tamaño para acomodar el nuevo campo
 
             // Titulo del modal
             Label title = new Label();
@@ -68,10 +66,11 @@ namespace TecnogadgedWin7
             leftPanel.Dock = DockStyle.Fill;
             leftPanel.BackColor = Color.Transparent;
             Controls.Add(leftPanel);
+
             // Campo de nombre
             name.Font = new Font("Arial", 12, FontStyle.Regular);
             name.ForeColor = Color.White;
-            name.Location = new Point(50, 110); // Bajado 30 unidades más
+            name.Location = new Point(50, 110);
             name.Size = new Size(200, 100);
             name.BackColor = Color.FromArgb(31, 30, 68);
             name.BorderStyle = BorderStyle.FixedSingle;
@@ -86,7 +85,7 @@ namespace TecnogadgedWin7
             nameText.Text = "Nombre";
             nameText.Font = new Font("Arial", 12, FontStyle.Regular);
             nameText.ForeColor = Color.Black;
-            nameText.Location = new Point(50, 80); // Bajado 30 unidades más
+            nameText.Location = new Point(50, 80);
             nameText.Size = new Size(200, 50);
             leftPanel.Controls.Add(nameText);
 
@@ -94,7 +93,7 @@ namespace TecnogadgedWin7
             IconPictureBox nameIcon = new IconPictureBox();
             nameIcon.IconChar = IconChar.User;
             nameIcon.IconColor = Color.FromArgb(31, 30, 68);
-            nameIcon.Location = new Point(10, 110); // Bajado 30 unidades más
+            nameIcon.Location = new Point(10, 110);
             nameIcon.Size = new Size(32, 32);
             nameIcon.BackColor = Color.Transparent;
             leftPanel.Controls.Add(nameIcon);
@@ -102,7 +101,7 @@ namespace TecnogadgedWin7
             // Campo de telefono
             phone = new TextBox();
             phone.ForeColor = Color.White;
-            phone.Location = new Point(50, 180); // Bajado 30 unidades más
+            phone.Location = new Point(50, 180);
             phone.Size = new Size(200, 50);
             phone.BackColor = Color.FromArgb(31, 30, 68);
             phone.BorderStyle = BorderStyle.FixedSingle;
@@ -124,7 +123,7 @@ namespace TecnogadgedWin7
             phoneText.Text = "Telefono";
             phoneText.Font = new Font("Arial", 12, FontStyle.Regular);
             phoneText.ForeColor = Color.Black;
-            phoneText.Location = new Point(50, 150); // Bajado 30 unidades más
+            phoneText.Location = new Point(50, 150);
             phoneText.Size = new Size(200, 50);
             leftPanel.Controls.Add(phoneText);
 
@@ -132,15 +131,14 @@ namespace TecnogadgedWin7
             IconPictureBox ageIcon = new IconPictureBox();
             ageIcon.IconChar = IconChar.Phone;
             ageIcon.IconColor = Color.FromArgb(31, 30, 68);
-            ageIcon.Location = new Point(10, 180); // Bajado 30 unidades más
+            ageIcon.Location = new Point(10, 180);
             ageIcon.Size = new Size(32, 32);
             ageIcon.BackColor = Color.Transparent;
             leftPanel.Controls.Add(ageIcon);
 
             // Campo de marca
-
             brand.ForeColor = Color.White;
-            brand.Location = new Point(50, 250); // Bajado 30 unidades más
+            brand.Location = new Point(50, 250);
             brand.Size = new Size(200, 50);
             brand.BackColor = Color.FromArgb(31, 30, 68);
             brand.BorderStyle = BorderStyle.FixedSingle;
@@ -155,7 +153,7 @@ namespace TecnogadgedWin7
             brandText.Text = "Marca";
             brandText.Font = new Font("Arial", 12, FontStyle.Regular);
             brandText.ForeColor = Color.Black;
-            brandText.Location = new Point(50, 220); // Bajado 30 unidades más
+            brandText.Location = new Point(50, 220);
             brandText.Size = new Size(200, 50);
             leftPanel.Controls.Add(brandText);
 
@@ -163,7 +161,7 @@ namespace TecnogadgedWin7
             IconPictureBox brandIcon = new IconPictureBox();
             brandIcon.IconChar = IconChar.Tag;
             brandIcon.IconColor = Color.FromArgb(31, 30, 68);
-            brandIcon.Location = new Point(10, 250); // Bajado 30 unidades más
+            brandIcon.Location = new Point(10, 250);
             brandIcon.Size = new Size(32, 32);
             brandIcon.BackColor = Color.Transparent;
             leftPanel.Controls.Add(brandIcon);
@@ -171,7 +169,7 @@ namespace TecnogadgedWin7
             // Campo de modelo
             model = new TextBox();
             model.ForeColor = Color.White;
-            model.Location = new Point(50, 320); // Bajado 30 unidades más
+            model.Location = new Point(50, 320);
             model.Size = new Size(200, 50);
             model.BackColor = Color.FromArgb(31, 30, 68);
             model.BorderStyle = BorderStyle.FixedSingle;
@@ -186,7 +184,7 @@ namespace TecnogadgedWin7
             modelText.Text = "Modelo";
             modelText.Font = new Font("Arial", 12, FontStyle.Regular);
             modelText.ForeColor = Color.Black;
-            modelText.Location = new Point(50, 290); // Bajado 30 unidades más
+            modelText.Location = new Point(50, 290);
             modelText.Size = new Size(200, 50);
             leftPanel.Controls.Add(modelText);
 
@@ -194,7 +192,7 @@ namespace TecnogadgedWin7
             IconPictureBox modelIcon = new IconPictureBox();
             modelIcon.IconChar = IconChar.PhoneAlt;
             modelIcon.IconColor = Color.FromArgb(31, 30, 68);
-            modelIcon.Location = new Point(10, 320); // Bajado 30 unidades más
+            modelIcon.Location = new Point(10, 320);
             modelIcon.Size = new Size(32, 32);
             modelIcon.BackColor = Color.Transparent;
             leftPanel.Controls.Add(modelIcon);
@@ -202,7 +200,7 @@ namespace TecnogadgedWin7
             // Campo de motivo
             reason = new TextBox();
             reason.ForeColor = Color.White;
-            reason.Location = new Point(50, 390); // Bajado 30 unidades más
+            reason.Location = new Point(50, 390);
             reason.Size = new Size(200, 50);
             reason.BackColor = Color.FromArgb(31, 30, 68);
             reason.BorderStyle = BorderStyle.FixedSingle;
@@ -217,33 +215,63 @@ namespace TecnogadgedWin7
             reasonText.Text = "Motivo";
             reasonText.Font = new Font("Arial", 12, FontStyle.Regular);
             reasonText.ForeColor = Color.Black;
-            reasonText.Location = new Point(50, 360); // Bajado 30 unidades más
+            reasonText.Location = new Point(50, 360);
             reasonText.Size = new Size(200, 50);
             leftPanel.Controls.Add(reasonText);
 
             // Icono para el campo de motivo
             IconPictureBox reasonIcon = new IconPictureBox();
-            //icono relacionado con el motivo
             reasonIcon.IconChar = IconChar.Inbox;
             reasonIcon.IconColor = Color.FromArgb(31, 30, 68);
-            reasonIcon.Location = new Point(10, 390); // Bajado 30 unidades más
+            reasonIcon.Location = new Point(10, 390);
             reasonIcon.Size = new Size(32, 32);
             reasonIcon.BackColor = Color.Transparent;
             leftPanel.Controls.Add(reasonIcon);
 
-            //Texto para el campo de fecha, poscionar a la derecha del campo de nombre
+            // Campo de comentarios
+            commentBox = new TextBox();
+            commentBox.ForeColor = Color.White;
+            commentBox.Location = new Point(50, 460);
+            commentBox.Size = new Size(450, 100);
+            commentBox.BackColor = Color.FromArgb(31, 30, 68);
+            commentBox.BorderStyle = BorderStyle.FixedSingle;
+            commentBox.Font = new Font("Arial", 12, FontStyle.Regular);
+            commentBox.Multiline = true; // Hacerlo multilínea
+            commentBox.ScrollBars = ScrollBars.Vertical; // Agregar scroll vertical
+            commentBox.Text = comment;
+            commentBox.MaxLength = 200; // Limitar a 500 caracteres
+            leftPanel.Controls.Add(commentBox);
+
+            //Texto para el campo de comentarios
+            Label commentText = new Label();
+            commentText.Text = "Comentarios";
+            commentText.Font = new Font("Arial", 12, FontStyle.Regular);
+            commentText.ForeColor = Color.Black;
+            commentText.Location = new Point(50, 430);
+            commentText.Size = new Size(200, 50);
+            leftPanel.Controls.Add(commentText);
+
+            // Icono para el campo de comentarios
+            IconPictureBox commentIcon = new IconPictureBox();
+            commentIcon.IconChar = IconChar.Comment;
+            commentIcon.IconColor = Color.FromArgb(31, 30, 68);
+            commentIcon.Location = new Point(10, 460);
+            commentIcon.Size = new Size(32, 32);
+            commentIcon.BackColor = Color.Transparent;
+            leftPanel.Controls.Add(commentIcon);
+
+            //Texto para el campo de fecha, posicionar a la derecha del campo de nombre
             Label dateText = new Label();
             dateText.Text = "Fecha de entrega";
             dateText.Font = new Font("Arial", 12, FontStyle.Regular);
             dateText.ForeColor = Color.Black;
-            dateText.Location = new Point(300, 80); // Bajado 30 unidades más
+            dateText.Location = new Point(300, 80);
             dateText.Size = new Size(200, 20);
             leftPanel.Controls.Add(dateText);
 
             // Campo de fecha
-
             datePicker.Format = DateTimePickerFormat.Custom;
-            datePicker.Location = new Point(300, 110); // Bajado 30 unidades más
+            datePicker.Location = new Point(300, 110);
             datePicker.Size = new Size(200, 50);
             datePicker.CustomFormat = "dd/MM/yyyy";
             datePicker.Value = DateTime.Parse(fecha);
@@ -252,101 +280,110 @@ namespace TecnogadgedWin7
             IconPictureBox dateIcon = new IconPictureBox();
             dateIcon.IconChar = IconChar.CalendarAlt;
             dateIcon.IconColor = Color.FromArgb(31, 30, 68);
-            dateIcon.Location = new Point(260, 110); // Bajado 30 unidades más
+            dateIcon.Location = new Point(260, 110);
             dateIcon.Size = new Size(32, 32);
             dateIcon.BackColor = Color.Transparent;
             leftPanel.Controls.Add(dateIcon);
 
-            //Texto para el campo de hora, poscionar a la derecha del campo de telefono
+            //Texto para el campo de hora, posicionar a la derecha del campo de telefono
             Label timeText = new Label();
             timeText.Text = "Hora de entrega";
             timeText.Font = new Font("Arial", 12, FontStyle.Regular);
             timeText.ForeColor = Color.Black;
-            timeText.Location = new Point(300, 150); // Bajado 30 unidades más
+            timeText.Location = new Point(300, 150);
             timeText.Size = new Size(200, 20);
             leftPanel.Controls.Add(timeText);
 
-
-
             // Campo de hora
-
             timePicker.Format = DateTimePickerFormat.Custom;
-            timePicker.Location = new Point(300, 180); // Bajado 30 unidades más
+            timePicker.Location = new Point(300, 180);
             timePicker.Size = new Size(200, 50);
             timePicker.ShowUpDown = true;
             timePicker.CustomFormat = "HH:mm";
             timePicker.Value = DateTime.Parse(hora);
             leftPanel.Controls.Add(timePicker);
 
-
-
             // Icono para el campo de hora
             IconPictureBox timeIcon = new IconPictureBox();
             timeIcon.IconChar = IconChar.Clock;
             timeIcon.IconColor = Color.FromArgb(31, 30, 68);
-            timeIcon.Location = new Point(260, 180); // Bajado 30 unidades más
+            timeIcon.Location = new Point(260, 180);
             timeIcon.Size = new Size(32, 32);
             timeIcon.BackColor = Color.Transparent;
             leftPanel.Controls.Add(timeIcon);
 
-            //Boton de guardar
+            // Botón de guardar
             Button saveButton = new Button();
             saveButton.Text = "Guardar";
             saveButton.Font = new Font("Arial", 12, FontStyle.Regular);
             saveButton.ForeColor = Color.White;
             saveButton.BackColor = Color.FromArgb(31, 30, 68);
             saveButton.FlatStyle = FlatStyle.Flat;
-            saveButton.Location = new Point(300, 360);
+            saveButton.Location = new Point(300, 600);
             saveButton.Size = new Size(200, 50);
             saveButton.Click += new EventHandler(SaveData);
             leftPanel.Controls.Add(saveButton);
-
-
-
-
-
         }
-        private void SaveData(object sender, EventArgs e)
+              private void SaveData(object sender, EventArgs e)
         {
-            //Antes de insertar los datos en la tabla, se valida que los campos no esten vacios
-            if (brand.Text == "" || name.Text == "" || phone.Text == "" || model.Text == "" || reason.Text == "" || datePicker.Text == "" || timePicker.Text == "")
+            // Antes de insertar los datos en la tabla, se valida que los campos no estén vacíos
+            if (string.IsNullOrWhiteSpace(brand.Text) || string.IsNullOrWhiteSpace(name.Text) || string.IsNullOrWhiteSpace(phone.Text) || string.IsNullOrWhiteSpace(model.Text) || string.IsNullOrWhiteSpace(reason.Text) || string.IsNullOrWhiteSpace(datePicker.Text) || string.IsNullOrWhiteSpace(timePicker.Text))
             {
                 MessageBox.Show("Por favor, llene todos los campos", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+        
             if (status != "ATRASADO" && status != "PENDIENTE")
             {
                 MessageBox.Show($"No puedes actualizar la fecha de entrega. El estado actual es: {status} para actualizar la fecha el registro debe tener un estado de PENDIENTE O ATRASADO", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-
-
-
+        
             try
             {
                 DbConnect dbConnect = new DbConnect();
-                //Fecha de ingreso automatica
-                String date_brought = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-                //Tomar la fecha y hora para crear la fecha de entrega
+                // Fecha de ingreso automática
+                string date_brought = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        
+                // Tomar la fecha y hora para crear la fecha de entrega
                 DateTime Date = datePicker.Value;
                 DateTime Time = timePicker.Value;
-
-                //Fusionar fecha y hora de entrega
+        
+                // Fusionar fecha y hora de entrega
                 DateTime deliveryDateTime = Date.Date.Add(Time.TimeOfDay);
-
+        
                 // Determinar el estatus basado en la fecha de entrega
-                string status = deliveryDateTime > DateTime.Now ? "PENDIENTE" : "ATRASADO";
-
-                //Query para insertar datos en la tabla
-                String query = "UPDATE customers SET nombre = '" + name.Text + "', telefono = '" + phone.Text + "', marca = '" + brand.Text + "', modelo = '" + model.Text + "', motivo = '" + reason.Text + "', fecha_entregar = '" + deliveryDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "', estatus = '" + status + "' WHERE nombre = '" + Nombre + "' AND telefono = '" + telefono + "' AND marca = '" + marca + "' AND modelo = '" + modelo + "' AND motivo = '" + motivo + "'";
-                dbConnect.ExecuteQuery(query);
-
+                string newStatus = deliveryDateTime > DateTime.Now ? "PENDIENTE" : "ATRASADO";
+        
+                // Query para actualizar datos en la tabla
+                string query = "UPDATE customers SET nombre = @nombre, telefono = @telefono, marca = @marca, modelo = @modelo, motivo = @motivo, fecha_entregar = @fecha_entregar, estatus = @estatus, comentarios = @comentarios WHERE nombre = @oldNombre AND telefono = @oldTelefono AND marca = @oldMarca AND modelo = @oldModelo AND motivo = @oldMotivo";
+        
+                using (MySqlCommand cmd = new MySqlCommand(query, dbConnect.Connection))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", name.Text);
+                    cmd.Parameters.AddWithValue("@telefono", phone.Text);
+                    cmd.Parameters.AddWithValue("@marca", brand.Text);
+                    cmd.Parameters.AddWithValue("@modelo", model.Text);
+                    cmd.Parameters.AddWithValue("@motivo", reason.Text);
+                    cmd.Parameters.AddWithValue("@fecha_entregar", deliveryDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("@estatus", newStatus);
+                    cmd.Parameters.AddWithValue("@comentarios", commentBox.Text);
+                    cmd.Parameters.AddWithValue("@oldNombre", Nombre);
+                    cmd.Parameters.AddWithValue("@oldTelefono", telefono);
+                    cmd.Parameters.AddWithValue("@oldMarca", marca);
+                    cmd.Parameters.AddWithValue("@oldModelo", modelo);
+                    cmd.Parameters.AddWithValue("@oldMotivo", motivo);
+        
+                    dbConnect.OpenConnection();
+                    cmd.ExecuteNonQuery();
+                    dbConnect.CloseConnection();
+                }
+        
                 // Obtener el valor del filtro desde la clase MainForm
                 string filterValue = mainForm.GetFilterValue();
                 string searchValue = mainForm.GetSearchValue();
                 mainForm.GetFilterRegisters(filterValue, searchValue);
-
+        
                 MessageBox.Show("Registro de cliente actualizado exitosamente", "Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CloseModal(sender, e);
             }
@@ -360,9 +397,8 @@ namespace TecnogadgedWin7
         {
             get
             {
-                // Oculta los controles superiores del formulario
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x80; // WS_EX_TOOLWINDOW
+                cp.ExStyle |= 0x80; 
                 return cp;
             }
         }
@@ -378,52 +414,9 @@ namespace TecnogadgedWin7
             }
             base.WndProc(ref m);
         }
-        //Funcion para cerrar el modal 
         private void CloseModal(object sender, EventArgs e)
         {
             Hide();
         }
-
-        //     private void PostARegister(object sender, EventArgs e)
-        // {
-        //     //Antes de insertar los datos en la tabla, se valida que los campos no esten vacios
-        //     if (name.Text == "" || phone.Text == "" || model.Text == "" || description.Text == "")
-        //     {
-        //         MessageBox.Show("Por favor, llene todos los campos", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //         return;
-        //     }
-
-        //     try
-        //     {
-
-        //         DbConnect dbConnect = new DbConnect();
-        //         //Fecha de ingreso automatica
-        //         String date_brought = DateTime.Now.ToString("yyyy-MM-dd   HH:mm:ss");
-
-        //         DateTime deliveryDate = delivery_date.Value;
-        //         DateTime deliveryTime = delivery_time.Value;
-
-        //         //Fusionar fecha y hora de entrega
-        //         string deliveryDateTime = deliveryDate.ToString("yyyy-MM-dd") + " " + deliveryTime.ToString("HH:mm:ss");
-        //         //Query para insertar datos en la tabla
-        //         String query = "INSERT INTO customers (nombre, telefono, tipo_dispositivo, marca, modelo, motivo, estatus, persona_recibio, fecha_recibido, fecha_entregar) VALUES ('" + name.Text + "', '" + phone.Text + "', '" + type_device.Text + "', '" + brand.Text + "', '" + model.Text + "', '" + description.Text + "', '" + "PENDIENTE" + "', '" + received_person.Text + "', '" + date_brought + "', '" + deliveryDateTime + "')";
-        //         dbConnect.ExecuteQuery(query);
-        //         // Obtener el valor del filtro desde la clase MainForm
-        //         string filterValue = mainForm.GetFilterValue();
-        //         string searchValue = mainForm.GetSearchValue();
-        //         mainForm.GetFilterRegisters(filterValue, searchValue);
-        //         MessageBox.Show("Registro de cliente exitoso", "Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        //         PrintToken(sender, e);
-        //         CloseModal(sender, e);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //     }
-
-        // }
-
-
     }
 }

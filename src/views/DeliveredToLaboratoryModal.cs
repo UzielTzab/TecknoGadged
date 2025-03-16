@@ -17,21 +17,24 @@ namespace TecnogadgedWin7
         int puntoXLabels = 100;
 
 
-        public DeliveredToLaboratoryModal(Form1 form, int id, string name, string brand, string model, string status, string problem, string type_device, string date_will_deliver)
+        public DeliveredToLaboratoryModal(Form1 form, int id, string name, string brand, string model, string status, string problem, string type_device, string date_will_deliver, string comment)
         {
-
             string[] fechaHora = date_will_deliver.Split(' ');
+            DateTime fecha;
+            string fechaFormateada = string.Empty;
+            if (DateTime.TryParse(fechaHora[0], out fecha))
+            {
+                fechaFormateada = fecha.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"));
+            }
             this.id = id;
             InitializeComponent();
-
-            // var (fecha, hora) = SepararFechaHora(date_will_deliver);
 
             mainForm = form;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Size = new Size(650, 580);
+            this.Size = new Size(650, 650); // Ajusté el tamaño para acomodar el nuevo campo
 
             // Crear panel izquierdo
             Panel leftPanel = new Panel();
@@ -117,7 +120,7 @@ namespace TecnogadgedWin7
 
             // Icono de la marca
             IconPictureBox brandIcon = new IconPictureBox();
-            brandIcon.IconChar = IconChar.Tag; ;
+            brandIcon.IconChar = IconChar.Tag;
             brandIcon.IconColor = Color.FromArgb(31, 30, 68);
             brandIcon.Location = new Point(puntoXIcons, 200);
             brandIcon.Size = new Size(32, 32);
@@ -173,6 +176,35 @@ namespace TecnogadgedWin7
             problemIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(problemIcon);
 
+            // Subtítulo y valor del comentario
+            Label commentSubtitle = new Label();
+            commentSubtitle.Text = "Comentarios:";
+            commentSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
+            commentSubtitle.ForeColor = Color.Black;
+            commentSubtitle.Location = new Point(puntoXLabels, 420);
+            commentSubtitle.Size = new Size(200, 20);
+            leftPanel.Controls.Add(commentSubtitle);
+
+            TextBox commentTextBox = new TextBox();
+            commentTextBox.Text = comment;
+            commentTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
+            commentTextBox.ForeColor = Color.Gray;
+            commentTextBox.Location = new Point(puntoXLabels, 440);
+            commentTextBox.Size = new Size(400, 60);
+            commentTextBox.Multiline = true;
+            commentTextBox.ScrollBars = ScrollBars.Vertical;
+            commentTextBox.ReadOnly = true;
+            commentTextBox.BackColor = Color.White;
+            leftPanel.Controls.Add(commentTextBox);
+
+            // Icono del comentario
+            IconPictureBox commentIcon = new IconPictureBox();
+            commentIcon.IconChar = IconChar.Comment;
+            commentIcon.IconColor = Color.FromArgb(31, 30, 68);
+            commentIcon.Location = new Point(puntoXIcons, 420);
+            commentIcon.Size = new Size(32, 32);
+            leftPanel.Controls.Add(commentIcon);
+
             // Subtítulo y valor del fecha de entrega
             Label deliveryDateSubtitle = new Label();
             deliveryDateSubtitle.Text = "Fecha de entrega:";
@@ -183,7 +215,7 @@ namespace TecnogadgedWin7
             leftPanel.Controls.Add(deliveryDateSubtitle);
 
             Label deliveryDateLabel = new Label();
-            deliveryDateLabel.Text = fechaHora[0];
+            deliveryDateLabel.Text = fechaFormateada;
             deliveryDateLabel.Font = new Font("Arial", 12, FontStyle.Regular);
             deliveryDateLabel.ForeColor = Color.Black;
             deliveryDateLabel.Location = new Point(puntoXLabels + 250, 100);
@@ -231,14 +263,10 @@ namespace TecnogadgedWin7
             timeIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(timeIcon);
 
-
-
-
-
-            // Boton para enviar los datos
+            // Botón para enviar los datos
             sendButton.Text = "Enviar al laboratorio";
             sendButton.Font = new Font("Arial", 12, FontStyle.Regular);
-            sendButton.Location = new Point(400, 460);
+            sendButton.Location = new Point(400, 520);
             sendButton.Size = new Size(200, 50);
             sendButton.BackColor = Color.FromArgb(31, 30, 68);
             sendButton.ForeColor = Color.White;
@@ -246,8 +274,6 @@ namespace TecnogadgedWin7
             sendButton.FlatAppearance.BorderSize = 0;
             sendButton.Click += new EventHandler(PutARegister!);
             leftPanel.Controls.Add(sendButton);
-
-
         }
         // private (string fecha, string hora) SepararFechaHora(string fechaHora)
         // {

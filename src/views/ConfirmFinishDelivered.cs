@@ -28,10 +28,16 @@ namespace TecnogadgedWin7
 
         List<string> personalNames = new List<string>();
 
-        public ConfirmFinishDelivered(Form1 form, int id, string name, string tipo_dispositivo, string brand, string model, string status, string problem, string fechaReparado, string costo, string diagnostico, string personaReparo, string personaRecibio, string fechaRecibido)
+       public ConfirmFinishDelivered(Form1 form, int id, string name, string tipo_dispositivo, string brand, string model, string status, string problem, string fechaReparado, string costo, string diagnostico, string personaReparo, string personaRecibio, string fechaRecibido, string comment, string refaccion)
         {
             GetPersonalNames();
             string[] fechaHora = fechaRecibido.Split(' ');
+            DateTime fecha;
+            string fechaFormateada = string.Empty;
+            if (DateTime.TryParse(fechaHora[0], out fecha))
+            {
+                fechaFormateada = fecha.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"));
+            }
 
             this.id = id;
             this.costo = costo;
@@ -42,14 +48,13 @@ namespace TecnogadgedWin7
             this.diagnostico = diagnostico;
             InitializeComponent();
 
-            // var (fecha, hora) = SepararFechaHora(fechaReparado);
-
             mainForm = form;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Size = new Size(600, 700);
+            this.Size = new Size(600, 800); // Ajusté el tamaño para acomodar los nuevos campos
+
             // Crear panel izquierdo
             Panel leftPanel = new Panel();
             leftPanel.Dock = DockStyle.Fill;
@@ -190,12 +195,41 @@ namespace TecnogadgedWin7
             problemIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(problemIcon);
 
+            // Subtítulo y valor del comentario
+            Label commentSubtitle = new Label();
+            commentSubtitle.Text = "Comentarios:";
+            commentSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
+            commentSubtitle.ForeColor = Color.Black;
+            commentSubtitle.Location = new Point(puntoXLabels, 420);
+            commentSubtitle.Size = new Size(200, 20);
+            leftPanel.Controls.Add(commentSubtitle);
+
+            TextBox commentTextBox = new TextBox();
+            commentTextBox.Text = comment;
+            commentTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
+            commentTextBox.ForeColor = Color.DarkOrange;
+            commentTextBox.Location = new Point(puntoXLabels, 440);
+            commentTextBox.Size = new Size(400, 60);
+            commentTextBox.Multiline = true;
+            commentTextBox.ScrollBars = ScrollBars.Vertical;
+            commentTextBox.ReadOnly = true;
+            commentTextBox.BackColor = Color.White;
+            leftPanel.Controls.Add(commentTextBox);
+
+            // Icono del comentario
+            IconPictureBox commentIcon = new IconPictureBox();
+            commentIcon.IconChar = IconChar.Comment;
+            commentIcon.IconColor = Color.FromArgb(31, 30, 68);
+            commentIcon.Location = new Point(puntoXIcons, 420);
+            commentIcon.Size = new Size(32, 32);
+            leftPanel.Controls.Add(commentIcon);
+
             // Subtítulo y valor de la persona que recibió
             Label personaRecibioSubtitle = new Label();
             personaRecibioSubtitle.Text = "Recepcionista:";
             personaRecibioSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
             personaRecibioSubtitle.ForeColor = Color.Black;
-            personaRecibioSubtitle.Location = new Point(puntoXLabels, 420);
+            personaRecibioSubtitle.Location = new Point(puntoXLabels, 520);
             personaRecibioSubtitle.Size = new Size(200, 20);
             leftPanel.Controls.Add(personaRecibioSubtitle);
 
@@ -203,7 +237,7 @@ namespace TecnogadgedWin7
             personaRecibioLabel.Text = personaRecibio;
             personaRecibioLabel.Font = new Font("Arial", 12, FontStyle.Regular);
             personaRecibioLabel.ForeColor = Color.Black;
-            personaRecibioLabel.Location = new Point(puntoXLabels, 440);
+            personaRecibioLabel.Location = new Point(puntoXLabels, 540);
             personaRecibioLabel.Size = new Size(200, 20);
             leftPanel.Controls.Add(personaRecibioLabel);
 
@@ -211,25 +245,24 @@ namespace TecnogadgedWin7
             IconPictureBox personaRecibioIcon = new IconPictureBox();
             personaRecibioIcon.IconChar = IconChar.UserAlt;
             personaRecibioIcon.IconColor = Color.FromArgb(31, 30, 68);
-            personaRecibioIcon.Location = new Point(puntoXIcons, 420);
+            personaRecibioIcon.Location = new Point(puntoXIcons, 520);
             personaRecibioIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(personaRecibioIcon);
 
-
-            //subtitulo y valor de la fecha recibido
+            // Subtítulo y valor de la fecha recibido
             Label fechaRecibidoSubtitle = new Label();
             fechaRecibidoSubtitle.Text = "Fecha recibido:";
             fechaRecibidoSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
             fechaRecibidoSubtitle.ForeColor = Color.Black;
-            fechaRecibidoSubtitle.Location = new Point(puntoXLabels, 480);
+            fechaRecibidoSubtitle.Location = new Point(puntoXLabels, 580);
             fechaRecibidoSubtitle.Size = new Size(200, 20);
             leftPanel.Controls.Add(fechaRecibidoSubtitle);
 
             Label fechaRecibidoLabel = new Label();
-            fechaRecibidoLabel.Text = fechaHora[0];
+            fechaRecibidoLabel.Text = fechaFormateada;
             fechaRecibidoLabel.Font = new Font("Arial", 12, FontStyle.Regular);
             fechaRecibidoLabel.ForeColor = Color.Black;
-            fechaRecibidoLabel.Location = new Point(puntoXLabels, 500);
+            fechaRecibidoLabel.Location = new Point(puntoXLabels, 600);
             fechaRecibidoLabel.Size = new Size(200, 20);
             leftPanel.Controls.Add(fechaRecibidoLabel);
 
@@ -237,21 +270,22 @@ namespace TecnogadgedWin7
             IconPictureBox fechaRecibidoIcon = new IconPictureBox();
             fechaRecibidoIcon.IconChar = IconChar.CalendarCheck;
             fechaRecibidoIcon.IconColor = Color.FromArgb(31, 30, 68);
-            fechaRecibidoIcon.Location = new Point(puntoXIcons, 480);
+            fechaRecibidoIcon.Location = new Point(puntoXIcons, 580);
             fechaRecibidoIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(fechaRecibidoIcon);
 
-            //Subtitulo y valor de la hora recibido
+            // Subtítulo y valor de la hora recibido
             Label horaRecibidoSubtitle = new Label();
             horaRecibidoSubtitle.Text = "Hora recibido:";
             horaRecibidoSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
             horaRecibidoSubtitle.ForeColor = Color.Black;
-            horaRecibidoSubtitle.Location = new Point(puntoXLabels + 220, 480);
+            horaRecibidoSubtitle.Location = new Point(puntoXLabels + 220, 580);
             horaRecibidoSubtitle.Size = new Size(200, 20);
             leftPanel.Controls.Add(horaRecibidoSubtitle);
 
             Label horaRecibidoLabel = new Label();
-            horaRecibidoLabel.Text = fechaHora[1]; DateTime hora;
+            horaRecibidoLabel.Text = fechaHora[1];
+            DateTime hora;
             if (DateTime.TryParse(fechaHora[1], out hora))
             {
                 horaRecibidoLabel.Text = hora.ToString("hh:mm tt"); // Formato de 12 horas con AM/PM
@@ -262,7 +296,7 @@ namespace TecnogadgedWin7
             }
             horaRecibidoLabel.Font = new Font("Arial", 12, FontStyle.Regular);
             horaRecibidoLabel.ForeColor = Color.Black;
-            horaRecibidoLabel.Location = new Point(puntoXLabels + 220, 500);
+            horaRecibidoLabel.Location = new Point(puntoXLabels + 220, 600);
             horaRecibidoLabel.Size = new Size(200, 20);
             leftPanel.Controls.Add(horaRecibidoLabel);
 
@@ -270,14 +304,9 @@ namespace TecnogadgedWin7
             IconPictureBox horaRecibidoIcon = new IconPictureBox();
             horaRecibidoIcon.IconChar = IconChar.Clock;
             horaRecibidoIcon.IconColor = Color.FromArgb(31, 30, 68);
-            horaRecibidoIcon.Location = new Point(puntoXIcons + 220, 480);
+            horaRecibidoIcon.Location = new Point(puntoXIcons + 220, 580);
             horaRecibidoIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(horaRecibidoIcon);
-
-
-
-
-
 
             // Subtítulo y valor del fecha de reparado
             Label fechaReparadoSubtitle = new Label();
@@ -288,21 +317,22 @@ namespace TecnogadgedWin7
             fechaReparadoSubtitle.Size = new Size(200, 20);
             leftPanel.Controls.Add(fechaReparadoSubtitle);
 
+            // Formatear la fecha de reparación
+            string[] fechaHoraReparado = fechaReparado.Split(' ');
+            DateTime fechaReparadoDate;
+            string fechaReparadoFormateada = string.Empty;
+            if (DateTime.TryParse(fechaHoraReparado[0], out fechaReparadoDate))
+            {
+                fechaReparadoFormateada = fechaReparadoDate.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"));
+            }
+            
+            // Combinar fecha y hora formateadas
             Label fechaReparadoLabel = new Label();
-            string[] fechaHoraRepaired = fechaReparado.Split(' ');
-            if (fechaHoraRepaired.Length >= 2 && DateTime.TryParse(fechaHoraRepaired[1], out DateTime hourRepaired))
-            {
-                fechaReparadoLabel.Text = $"{fechaHoraRepaired[0]} {hourRepaired.ToString("hh:mm tt")}";
-            }
-            else
-            {
-                fechaReparadoLabel.Text = fechaReparado; // En caso de que no se pueda convertir, usar el valor original
-            }
-
+            fechaReparadoLabel.Text = $"{fechaReparadoFormateada}";
             fechaReparadoLabel.Font = new Font("Arial", 12, FontStyle.Regular);
             fechaReparadoLabel.ForeColor = Color.Black;
             fechaReparadoLabel.Location = new Point(puntoXLabels + 220, 100);
-            fechaReparadoLabel.Size = new Size(200, 20);
+            fechaReparadoLabel.Size = new Size(220, 20);
             leftPanel.Controls.Add(fechaReparadoLabel);
 
             // Icono de la fecha de reparado
@@ -322,13 +352,18 @@ namespace TecnogadgedWin7
             diagnosticoSubtitle.Size = new Size(200, 20);
             leftPanel.Controls.Add(diagnosticoSubtitle);
 
-            Label diagnosticoLabel = new Label();
-            diagnosticoLabel.Text = diagnostico;
-            diagnosticoLabel.Font = new Font("Arial", 12, FontStyle.Regular);
-            diagnosticoLabel.ForeColor = Color.Green;
-            diagnosticoLabel.Location = new Point(puntoXLabels + 220, 160);
-            diagnosticoLabel.Size = new Size(200, 60);
-            leftPanel.Controls.Add(diagnosticoLabel);
+            TextBox diagnosticoTextBox = new TextBox();
+            diagnosticoTextBox.Text = diagnostico;
+            diagnosticoTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
+            diagnosticoTextBox.ForeColor = Color.Green;
+            diagnosticoTextBox.Location = new Point(puntoXLabels + 220, 160);
+            diagnosticoTextBox.Size = new Size(200, 60);
+            diagnosticoTextBox.Multiline = true;
+            diagnosticoTextBox.MaxLength = 500;
+            diagnosticoTextBox.ScrollBars = ScrollBars.Vertical;
+            diagnosticoTextBox.ReadOnly = true;
+            diagnosticoTextBox.BackColor = Color.White;
+            leftPanel.Controls.Add(diagnosticoTextBox);
 
             // Icono del diagnostico
             IconPictureBox diagnosticoIcon = new IconPictureBox();
@@ -372,10 +407,22 @@ namespace TecnogadgedWin7
             costoLabel.Size = new Size(200, 20);
             leftPanel.Controls.Add(costoLabel);
 
+            // Subtítulo y valor de la refacción
+            Label refaccionSubtitle = new Label();
+            refaccionSubtitle.Text = "Costo de refacción:";
+            refaccionSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
+            refaccionSubtitle.ForeColor = Color.Black;
+            refaccionSubtitle.Location = new Point(puntoXLabels + 220, 350);
+            refaccionSubtitle.Size = new Size(200, 20);
+            leftPanel.Controls.Add(refaccionSubtitle);
 
-
-
-
+            Label refaccionLabel = new Label();
+            refaccionLabel.Text = $"${refaccion}";
+            refaccionLabel.Font = new Font("Arial", 12, FontStyle.Regular);
+            refaccionLabel.ForeColor = Color.Black;
+            refaccionLabel.Location = new Point(puntoXLabels + 220, 370);
+            refaccionLabel.Size = new Size(200, 20);
+            leftPanel.Controls.Add(refaccionLabel);
 
             // Botón de enviar
             sendButton.Text = "Entregar el equipo";
@@ -384,35 +431,28 @@ namespace TecnogadgedWin7
             sendButton.BackColor = Color.FromArgb(31, 30, 68);
             sendButton.FlatStyle = FlatStyle.Flat;
             sendButton.FlatAppearance.BorderSize = 0;
-            sendButton.Location = new Point(160, 550);
+            sendButton.Location = new Point(160, 650);
             sendButton.Size = new Size(250, 40);
             sendButton.Click += new EventHandler(PutARegister!);
             leftPanel.Controls.Add(sendButton);
 
-            // Boton de imprmir factura
+            // Botón de imprimir factura
             printButton.Text = "Imprimir factura";
             printButton.Font = new Font("Arial", 12, FontStyle.Bold);
             printButton.ForeColor = Color.White;
             printButton.BackColor = Color.FromArgb(31, 30, 68);
             printButton.FlatStyle = FlatStyle.Flat;
             printButton.FlatAppearance.BorderSize = 0;
-            printButton.Location = new Point(160, 600);
+            printButton.Location = new Point(160, 700);
             printButton.Size = new Size(250, 40);
             printButton.Click += new EventHandler(PrintInvoice!);
             leftPanel.Controls.Add(printButton);
-
-
-
-
-
-
-
         }
         public void GetPersonalNames()
         {
             // Instanciar la clase DbConnect y ejecutar la consulta
             DbConnect dbConnect = new DbConnect();
-            string query = "SELECT nombre FROM person";
+            string query = "SELECT nombre FROM employees";
             DataTable dataTable = dbConnect.ExecuteQuery(query);
 
             // Agregar los nombres de los empleados al ComboBox
