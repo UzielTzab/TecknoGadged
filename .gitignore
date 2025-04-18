@@ -2,6 +2,7 @@
 bin/
 obj/
 publish/
+Output/
 
 # Configuración del usuario
 *.user
