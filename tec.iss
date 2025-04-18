@@ -5,7 +5,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 ; Nombre de la aplicación
 AppName=Teknogadged
 ; Versión de la aplicación
-AppVersion=25.0
+AppVersion=26.0
 ; Carpeta de salida del instalador
 OutputDir=Output
 ; Nombre del archivo del instalador

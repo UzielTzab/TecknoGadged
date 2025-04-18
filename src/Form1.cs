@@ -46,8 +46,9 @@ namespace TecnogadgedWin7
         public ComboBox employeeSelector = new ComboBox();
         public ComboBox reportPerWeekSelector = new ComboBox();
         public ComboBox dateOptionSelector = new ComboBox();
-        public DateTimePicker dateRepairedFilter = new DateTimePicker();
-      
+        public DateTimePicker dateStartOfRange = new DateTimePicker();
+        public DateTimePicker dateFinalOfRange = new DateTimePicker();
+
 
         //Selector de filtrado
         public ComboBox filter = new ComboBox();
@@ -77,7 +78,7 @@ namespace TecnogadgedWin7
 
         ListBox personalList = new ListBox();
         List<string> personalNames = new List<string>();
-        List <string> WeeklyReportsPerEmployee = new List <string>();
+        List<string> WeeklyReportsPerEmployee = new List<string>();
 
         private System.Windows.Forms.Timer timer1;
         public DateTimePicker searchDatePicker = new DateTimePicker();
@@ -96,7 +97,7 @@ namespace TecnogadgedWin7
             // Inicializar el DataGridView
             dataGridView.Location = new Point((int)(Width * 0.32), 200);
             //Establecer el tamaño del dataGridView con respecto a la resolucion de la pantalla
-            dataGridView.Size = new Size((int)(Width * 1.2), (int)(Height * 1.3));
+            dataGridView.Size = new Size((int)(Width * 1.2), (int)(Height * 1));
             dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             dataGridView.BorderStyle = BorderStyle.FixedSingle;
             dataGridView.BackgroundColor = Color.White;
@@ -273,30 +274,40 @@ namespace TecnogadgedWin7
             dateOptionSelector.SelectedIndex = 0; // Establecer "Ninguna fecha" como opción predeterminada
             dateOptionSelector.SelectedIndexChanged += new EventHandler(FilterButton_Click!);
             rightPanel.Controls.Add(dateOptionSelector);
-            
+
             // Manejar el evento SelectedIndexChanged para mostrar u ocultar el DateTimePicker
             dateOptionSelector.SelectedIndexChanged += (sender, e) =>
             {
                 if (dateOptionSelector.SelectedItem.ToString() == "Filtrar por fecha de reparación" || dateOptionSelector.SelectedItem.ToString() == "Filtrar por fecha recibido" || dateOptionSelector.SelectedItem.ToString() == "Filtrar por fecha de entrega")
                 {
-                    dateRepairedFilter.Visible = true;
+                    dateStartOfRange.Visible = true;
+                    dateFinalOfRange.Visible = true;
                 }
                 else
                 {
-                    dateRepairedFilter.Visible = false;
+                    dateStartOfRange.Visible = false;
+                    dateFinalOfRange.Visible = false;
                 }
             };
-            
+
             // Configurar el DateTimePicker para el filtrado de las 3 tipos de fechas
-            dateRepairedFilter.Location = new Point(460, 120); // Ajustar la posición del DateTimePicker
-            dateRepairedFilter.ForeColor = Color.White;
-            dateRepairedFilter.CalendarForeColor = Color.FromArgb(31, 30, 68);
-            dateRepairedFilter.Visible = false; // Ocultar el DateTimePicker por defecto
-            dateRepairedFilter.ValueChanged += new EventHandler(FilterButton_Click!);
-            rightPanel.Controls.Add(dateRepairedFilter);        
+            dateStartOfRange.Location = new Point(460, 120); // Ajustar la posición del DateTimePicker
+            dateStartOfRange.ForeColor = Color.White;
+            dateStartOfRange.CalendarForeColor = Color.FromArgb(31, 30, 68);
+            dateStartOfRange.Visible = false; // Ocultar el DateTimePicker por defecto
+            dateStartOfRange.ValueChanged += new EventHandler(FilterButton_Click!);
+            rightPanel.Controls.Add(dateStartOfRange);
+
+
+            // Configurar el DateTimePicker para el filtrado de las 3 tipos de fechas
+            dateFinalOfRange.Location = new Point(460, 140); // Ajustar la posición del DateTimePicker
+            dateFinalOfRange.ForeColor = Color.White;
+            dateFinalOfRange.CalendarForeColor = Color.FromArgb(31, 30, 68);
+            dateFinalOfRange.Visible = false; // Ocultar el DateTimePicker por defecto
+            dateFinalOfRange.ValueChanged += new EventHandler(FilterButton_Click!);
+            rightPanel.Controls.Add(dateFinalOfRange);
 
             //Descripcion del uso del filtrado por estado
-
             descriptionFilter.Text = "Filtrar por estado";
             descriptionFilter.Font = new Font("Arial", 15, FontStyle.Regular);
             descriptionFilter.ForeColor = Color.Gray;
@@ -324,6 +335,7 @@ namespace TecnogadgedWin7
             search.TextAlign = HorizontalAlignment.Center;
             search.KeyDown += new KeyEventHandler(Search_KeyDown!);
             rightPanel.Controls.Add(search);
+
             //Selector para elegir si el buscador buscara por empleado o cliente
             filterForEmployeeOrClient.ForeColor = Color.White;
             filterForEmployeeOrClient.Location = new Point(550, 150);
@@ -339,8 +351,6 @@ namespace TecnogadgedWin7
             filterForEmployeeOrClient.SelectedIndexChanged += new EventHandler(FilterForEmployeeOrClient!);
             filterForEmployeeOrClient.SelectedIndex = 0;
             rightPanel.Controls.Add(filterForEmployeeOrClient);
-
-
 
             //Selector de filtrado
             filter.ForeColor = Color.White;
@@ -385,7 +395,7 @@ namespace TecnogadgedWin7
             inLaboratoryButton.FlatAppearance.BorderSize = 0;
             inLaboratoryButton.Click += new EventHandler(filterButtons.LaboratoryButton_Click);
             rightPanel.Controls.Add(inLaboratoryButton);
-            
+
             // Configurar el IconPictureBox
             indicator.IconChar = IconChar.ChainBroken;
             indicator.IconColor = Color.Gray;
@@ -395,7 +405,7 @@ namespace TecnogadgedWin7
             indicator.Location = new Point((int)indicatorX, (int)indicatorY); // Centrar el icono horizontalmente y verticalmente en el dataGridView
             rightPanel.Controls.Add(indicator);
             indicator.BringToFront(); // Asegurarse de que se superponga por encima de todos los componentes
-            
+
             // Configurar el Label
             indicatorLabel.Text = "Aún no hay registros.";
             indicatorLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -438,7 +448,7 @@ namespace TecnogadgedWin7
             // timer1.Tick += new EventHandler(timer1_Tick);
             // timer1.Start();
         }
-      
+
         private void FilterForEmployeeOrClient(object sender, EventArgs e)
         {
             filterType = filterForEmployeeOrClient.SelectedItem.ToString();
@@ -448,7 +458,7 @@ namespace TecnogadgedWin7
             ExecutePeriodicTask();
             DbConnect dbConnect = new DbConnect();
             string query = string.Empty;
-        
+
             switch (filterSelect)
             {
                 case "Todos":
@@ -461,7 +471,7 @@ namespace TecnogadgedWin7
                     FROM customers 
                     WHERE estatus IN ('PENDIENTE', 'ATRASADO')";
                     break;
-        
+
                 case "En laboratorio":
                     query = @"
                     SELECT *, 
@@ -469,32 +479,31 @@ namespace TecnogadgedWin7
                     FROM customers 
                     WHERE estatus IN ('EN LABORATORIO')";
                     break;
-        
+
                 case "Reparados":
                     query = "SELECT * FROM customers WHERE estatus = 'REPARADO'";
                     break;
-        
+
                 case "Entregados":
                     query = "SELECT * FROM customers WHERE estatus = 'ENTREGADO'";
                     break;
-        
+
                 case "No reparados":
                     query = "SELECT * FROM customers WHERE estatus = 'NO REPARADO'";
                     break;
             }
-        
+
             if (!string.IsNullOrEmpty(query))
             {
                 if (!string.IsNullOrEmpty(search))
                 {
-                    // Verificar si la consulta ya tiene una cláusula WHERE
                     if (query.Contains("WHERE"))
                     {
                         if (filterType == "Cliente")
                         {
                             query += " AND nombre LIKE @search";
                         }
-                        else if (filterType == "Empleado")
+                        else if (filterType == "Empleado que reparó")
                         {
                             query += " AND persona_reparo LIKE @search";
                         }
@@ -527,8 +536,9 @@ namespace TecnogadgedWin7
                         }
                     }
                 }
-        
-                // Filtrar por fecha según la opción seleccionada en el ComboBox
+
+
+                // Filtrar por rango de fechas según la opción seleccionada en el ComboBox
                 if (dateOptionSelector.SelectedItem.ToString() != "Ninguna fecha")
                 {
                     string dateColumn = string.Empty;
@@ -544,20 +554,20 @@ namespace TecnogadgedWin7
                             dateColumn = "fecha_entregar";
                             break;
                     }
-        
+
                     if (!string.IsNullOrEmpty(dateColumn))
                     {
                         if (query.Contains("WHERE"))
                         {
-                            query += $" AND DATE({dateColumn}) = @selectedDate";
+                            query += $" AND DATE({dateColumn}) BETWEEN @startDate AND @endDate";
                         }
                         else
                         {
-                            query += $" WHERE DATE({dateColumn}) = @selectedDate";
+                            query += $" WHERE DATE({dateColumn}) BETWEEN @startDate AND @endDate";
                         }
                     }
                 }
-        
+
                 // Añadir la cláusula ORDER BY según el filtro seleccionado
                 if (filterSelect == "Pendientes/atrasados" || filterSelect == "En laboratorio")
                 {
@@ -567,20 +577,16 @@ namespace TecnogadgedWin7
                 {
                     query += " ORDER BY fecha_recibido";
                 }
-        
+
                 // Crear un diccionario de parámetros para la consulta
                 var parameters = new Dictionary<string, object>
                 {
-                    { "@search", "%" + search + "%" }
+                    { "@search", "%" + search + "%" },
+                    { "@startDate", dateStartOfRange.Value.Date },
+                    { "@endDate", dateFinalOfRange.Value.Date }
                 };
-        
-                if (dateOptionSelector.SelectedItem.ToString() != "Ninguna fecha")
-                {
-                    parameters.Add("@selectedDate", dateRepairedFilter.Value.Date);
-                }
-        
                 DataTable dataTable = dbConnect.ExecuteQuery(query, parameters);
-        
+
                 // Cambiar los nombres de las columnas a nombres más cómodos
                 dataTable.Columns["id"]!.ColumnName = "ID";
                 dataTable.Columns["nombre"]!.ColumnName = "Nombre del cliente";
@@ -599,26 +605,26 @@ namespace TecnogadgedWin7
                 dataTable.Columns["fecha_reparado"]!.ColumnName = "Fecha de Reparación";
                 dataTable.Columns["refaccion"]!.ColumnName = "Refacción"; // Nuevo campo
                 dataTable.Columns["costo"]!.ColumnName = "Costo";
-        
+
                 // Eliminar la columna 'tiempo_restante' del DataTable
                 if (dataTable.Columns.Contains("tiempo_restante"))
                 {
                     dataTable.Columns.Remove("tiempo_restante");
                 }
-        
+
                 // Asignar los datos al DataGridView
                 dataGridView.DataSource = dataTable;
                 dataGridView.AllowUserToAddRows = false;
-        
+
                 dataGridView.Columns["ID"].Visible = false;
-        
+
                 // Manejar los eventos
                 dataGridView.CellFormatting -= dataGridView_CellFormatting!;
                 dataGridView.CellClick -= dataGridView_CellClick!;
-        
+
                 dataGridView.CellFormatting += new DataGridViewCellFormattingEventHandler(dataGridView_CellFormatting!);
                 dataGridView.CellClick += new DataGridViewCellEventHandler(dataGridView_CellClick!);
-        
+
                 // Verificar si la tabla está vacía
                 if (dataTable.Rows.Count == 0)
                 {
@@ -634,13 +640,13 @@ namespace TecnogadgedWin7
                 }
             }
         }
-        
+
         public void GetAllRegisters(object sender, EventArgs e)
         {
             ExecutePeriodicTask();
             DbConnect dbConnect = new DbConnect();
             string query = "SELECT * FROM customers WHERE estatus IN ('PENDIENTE', 'ATRASADO') ORDER BY fecha_recibido DESC";
-        
+
             // Crear las columnas de botones "Acciones", "Eliminar" y "Editar" antes de asignar los datos
             if (!dataGridView.Columns.Contains("Acciones"))
             {
@@ -653,7 +659,7 @@ namespace TecnogadgedWin7
                 accionesColumn.DefaultCellStyle.Padding = new Padding(3, 3, 3, 3);
                 dataGridView.Columns.Insert(0, accionesColumn); // Insertar en la primera posición
             }
-        
+
             if (!dataGridView.Columns.Contains("Eliminar"))
             {
                 // Agregar la columna de botones "Eliminar"
@@ -676,9 +682,9 @@ namespace TecnogadgedWin7
                 editarColumn.UseColumnTextForButtonValue = true; // Mostrar el texto en los botones    
                 dataGridView.Columns.Insert(2, editarColumn); // Insertar en la tercera posición
             }
-        
+
             DataTable dataTable = dbConnect.ExecuteQuery(query);
-        
+
             // Cambiar los nombres de las columnas a nombres más cómodos
             dataTable.Columns["id"]!.ColumnName = "ID";
             dataTable.Columns["nombre"]!.ColumnName = "Nombre del cliente";
@@ -697,18 +703,18 @@ namespace TecnogadgedWin7
             dataTable.Columns["fecha_reparado"]!.ColumnName = "Fecha de Reparación";
             dataTable.Columns["refaccion"]!.ColumnName = "Refacción"; // Nuevo campo
             dataTable.Columns["costo"]!.ColumnName = "Costo";
-        
+
             // Asignar los datos al DataGridView
             dataGridView.DataSource = dataTable;
             dataGridView.AllowUserToAddRows = false;
-        
+
             // Manejar los eventos
             dataGridView.CellFormatting -= dataGridView_CellFormatting!;
             dataGridView.CellClick -= dataGridView_CellClick!;
-        
+
             dataGridView.CellFormatting += new DataGridViewCellFormattingEventHandler(dataGridView_CellFormatting!);
             dataGridView.CellClick += new DataGridViewCellEventHandler(dataGridView_CellClick!);
-        
+
             GetFilterRegisters(filter.Text, search.Text);
         }
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -720,7 +726,7 @@ namespace TecnogadgedWin7
                 var cellValue = dataGridView.Rows[e.RowIndex].Cells["Acciones"].Value;
                 // Obtener el valor del estatus
                 string statusNow = dataGridView.Rows[e.RowIndex].Cells["Estatus"].Value.ToString()!;
-        
+
                 // Verificar si el estatus es "Pendiente" o "Atrasado"
                 if (statusNow == "PENDIENTE" || statusNow == "ATRASADO")
                 {
@@ -732,8 +738,8 @@ namespace TecnogadgedWin7
                     string motivo = dataGridView.Rows[e.RowIndex].Cells["Motivo"].Value.ToString()!;
                     string fechaEntregar = dataGridView.Rows[e.RowIndex].Cells["Fecha de Entrega"].Value.ToString()!;
                     string comentarios = dataGridView.Rows[e.RowIndex].Cells["Comentarios"].Value?.ToString() ?? string.Empty; // Nuevo campo
-                    // string refaccion = dataGridView.Rows[e.RowIndex].Cells["Refacción"].Value.ToString()!;
-        
+                                                                                                                               // string refaccion = dataGridView.Rows[e.RowIndex].Cells["Refacción"].Value.ToString()!;
+
                     // Verificar si el modal ya está abierto
                     if (Application.OpenForms["DeliveredModal"] == null)
                     {
@@ -751,7 +757,7 @@ namespace TecnogadgedWin7
                     string fechaEntregar = dataGridView.Rows[e.RowIndex].Cells["Fecha de Entrega"].Value.ToString()!;
                     string comentarios = dataGridView.Rows[e.RowIndex].Cells["Comentarios"].Value?.ToString() ?? string.Empty;
                     string refaccion = dataGridView.Rows[e.RowIndex].Cells["Refacción"].Value.ToString()!;
-        
+
                     OpenRepairFormButton_Click(sender, e, id, name, tipoDispositivo, brand, model, motivo, statusNow, fechaEntregar, comentarios);
                 }
                 else if (statusNow == "REPARADO" || statusNow == "NO REPARADO")
@@ -779,14 +785,14 @@ namespace TecnogadgedWin7
                     ConfirmFinished(id);
                 }
             }
-        
+
             // Verificar si el clic fue en la columna de eliminar
             if (e.ColumnIndex == dataGridView.Columns["Eliminar"].Index && e.RowIndex >= 0 && e.RowIndex < dataGridView.Rows.Count)
             {
                 int id = Convert.ToInt32(dataGridView.Rows[e.RowIndex].Cells["ID"].Value);
                 DeleteRecordById(id);
             }
-        
+
             // Verificar si el clic fue en la columna de editar
             if (e.ColumnIndex == dataGridView.Columns["Editar"].Index && e.RowIndex >= 0 && e.RowIndex < dataGridView.Rows.Count)
             {
@@ -801,19 +807,19 @@ namespace TecnogadgedWin7
                 string statusNow = dataGridView.Rows[e.RowIndex].Cells["Estatus"].Value.ToString()!;
                 string comentarios = dataGridView.Rows[e.RowIndex].Cells["Comentarios"].Value?.ToString() ?? string.Empty; // Nuevo campo
                 string refaccion = dataGridView.Rows[e.RowIndex].Cells["Refacción"].Value.ToString()!;
-            
-                // Verificar si el estado es diferente de "PENDIENTE" y "ATRASADO"
-                if (statusNow != "PENDIENTE" && statusNow != "ATRASADO")
+
+                // Verificar si el estado es diferente de "PENDIENTE", "ATRASADO", "EN LABORATORIO" y "REPARADO"
+                if (statusNow != "PENDIENTE" && statusNow != "ATRASADO" && statusNow != "EN LABORATORIO" && statusNow != "REPARADO")
                 {
-                    MessageBox.Show("No se puede editar el cliente porque el estado no es ni PENDIENTE ni ATRASADO.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("No puedes editar un registro que ya ha finalizado", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-            
+
                 // Separar la fecha de entrega en fecha y hora
                 string[] fechaEntregarArray = fechaEntregar.Split(' ');
                 string fecha = fechaEntregarArray[0];
                 string hora = fechaEntregarArray[1];
-            
+
                 OpenEditCustomerModal(name, phone, brand, model, motivo, fecha, hora, statusNow, comentarios);
             }
         }
@@ -827,7 +833,7 @@ namespace TecnogadgedWin7
                     e.FormattingApplied = true;
                 }
             }
-        
+
             if (dataGridView.Columns[e.ColumnIndex].Name == "Estatus")
             {
                 if (e.Value != null)
@@ -859,7 +865,7 @@ namespace TecnogadgedWin7
                     }
                 }
             }
-        
+
             if (dataGridView.Columns[e.ColumnIndex].Name == "Fecha de Entrega")
             {
                 if (e.Value != null)
@@ -895,7 +901,7 @@ namespace TecnogadgedWin7
             {
                 // Obtener el valor de la celda en la columna "estatus"
                 string estatus = dataGridView.Rows[e.RowIndex].Cells["Estatus"].Value?.ToString()!;
-        
+
                 // Cambiar el texto del botón según el valor de "estatus"
                 if (estatus == "PENDIENTE")
                 {
@@ -905,12 +911,12 @@ namespace TecnogadgedWin7
                 {
                     e.Value = "Entregar";
                 }
-        
+
                 // Establecer el estilo del botón según el estatus
                 DataGridViewButtonCell buttonCell = (DataGridViewButtonCell)dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
                 buttonCell.FlatStyle = FlatStyle.Flat;
                 buttonCell.Style.ForeColor = Color.White;
-        
+
                 switch (estatus)
                 {
                     case "PENDIENTE":
@@ -943,13 +949,13 @@ namespace TecnogadgedWin7
             {
                 // Obtener el valor de la celda en la columna "estatus"
                 string estatus = dataGridView.Rows[e.RowIndex].Cells["Estatus"].Value?.ToString()!;
-        
+
                 // Deshabilitar el botón de edición si el estatus no es "PENDIENTE" o "ATRASADO"
                 DataGridViewButtonCell buttonCell = (DataGridViewButtonCell)dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
                 buttonCell.FlatStyle = FlatStyle.Flat;
                 buttonCell.Style.ForeColor = Color.White;
-        
-                if (estatus != "PENDIENTE" && estatus != "ATRASADO")
+
+                if (estatus != "PENDIENTE" && estatus != "ATRASADO" && estatus != "EN LABORATORIO" && estatus != "REPARADO")
                 {
                     buttonCell.Style.BackColor = Color.Gray;
                     buttonCell.ReadOnly = true;
@@ -960,18 +966,18 @@ namespace TecnogadgedWin7
                     buttonCell.ReadOnly = false;
                 }
             }
-             else if (dataGridView.Columns[e.ColumnIndex].Name == "Eliminar")
+            else if (dataGridView.Columns[e.ColumnIndex].Name == "Eliminar")
             {
-               
-        
+
+
                 // Deshabilitar el botón de edición si el estatus no es "PENDIENTE" o "ATRASADO"
                 DataGridViewButtonCell buttonCell = (DataGridViewButtonCell)dataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
                 buttonCell.FlatStyle = FlatStyle.Flat;
                 buttonCell.Style.ForeColor = Color.White;
-        
+
                 buttonCell.Style.BackColor = Color.DarkRed;
                 buttonCell.ReadOnly = false;
-                
+
             }
             if (dataGridView.Columns[e.ColumnIndex].Name == "Fecha de Entrega")
             {
@@ -984,7 +990,7 @@ namespace TecnogadgedWin7
                 e.CellStyle.BackColor = Color.LightGoldenrodYellow;
                 e.CellStyle.ForeColor = Color.Black;
             }
-        
+
             if (dataGridView.Columns[e.ColumnIndex].Name == "Fecha de Recepción" || dataGridView.Columns[e.ColumnIndex].Name == "Persona que Recibió")
             {
                 if (e.Value != null && DateTime.TryParse(e.Value.ToString(), out DateTime fechaRecibido))
@@ -996,7 +1002,7 @@ namespace TecnogadgedWin7
                 e.CellStyle.BackColor = Color.LightSteelBlue;
                 e.CellStyle.ForeColor = Color.Black;
             }
-        
+
             if (dataGridView.Columns[e.ColumnIndex].Name == "Fecha de Reparación" || dataGridView.Columns[e.ColumnIndex].Name == "Persona que Reparó" || dataGridView.Columns[e.ColumnIndex].Name == "Diagnóstico" || dataGridView.Columns[e.ColumnIndex].Name == "Costo")
             {
                 if (e.Value != null && DateTime.TryParse(e.Value.ToString(), out DateTime fechaReparado))
@@ -1008,19 +1014,19 @@ namespace TecnogadgedWin7
                 e.CellStyle.BackColor = Color.DarkKhaki;
                 e.CellStyle.ForeColor = Color.Black;
             }
-        
+
             if (dataGridView.Columns[e.ColumnIndex].Name == "Nombre del cliente" || dataGridView.Columns[e.ColumnIndex].Name == "Teléfono")
             {
                 e.CellStyle.BackColor = Color.White;
                 e.CellStyle.ForeColor = Color.Black;
             }
-        
+
             if (dataGridView.Columns[e.ColumnIndex].Name == "Tipo de Dispositivo" || dataGridView.Columns[e.ColumnIndex].Name == "Marca" || dataGridView.Columns[e.ColumnIndex].Name == "Modelo")
             {
                 e.CellStyle.BackColor = Color.DarkOliveGreen;
                 e.CellStyle.ForeColor = Color.White;
             }
-        
+
             if (dataGridView.Columns[e.ColumnIndex].Name == "Motivo")
             {
                 e.CellStyle.BackColor = Color.DarkRed;
@@ -1145,7 +1151,7 @@ namespace TecnogadgedWin7
             description3.Size = new Size(250, 50);
             rightPanel.Controls.Add(description3);
 
-           // ComboBox para seleccionar reportes semanales
+            // ComboBox para seleccionar reportes semanales
             reportPerWeekSelector.Items.Clear(); // Limpiar los elementos del ComboBox
             reportPerWeekSelector.Location = new Point(description3.Right + 10, description3.Top);
             reportPerWeekSelector.Size = new Size(400, 50);
@@ -1172,7 +1178,7 @@ namespace TecnogadgedWin7
             dailyReportTitle.Location = new Point(300, 340); // Posición del título
             dailyReportTitle.Size = new Size(300, 30);
             rightPanel.Controls.Add(dailyReportTitle);
-            
+
             // Crear tabla para mostrar los reportes diarios
             dailyReportTable.Location = new Point(300, 390); // Bajar la tabla 10 unidades
             dailyReportTable.Size = new Size(rightPanel.Width - 350, rightPanel.Height - 400); // Ajustar el tamaño de la tabla con un margen de 10 unidades a la derecha y en la parte inferior
@@ -1220,9 +1226,9 @@ namespace TecnogadgedWin7
             {
                 rightPanel.Controls.Add(dailyReportTable);
             }
-            
+
         }
-        
+
         private void DeleteEmployee(int id)
         {
             try
@@ -1272,7 +1278,7 @@ namespace TecnogadgedWin7
                 return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
             }
         }
-      
+
         //Modales para crear y editar un empleado
         public void OpenEditPersonModal(int id, string name)
         {
@@ -1446,8 +1452,8 @@ namespace TecnogadgedWin7
             float indicatorY = dataGridView.Location.Y + (dataGridView.Height - indicator.Height) / 2.0f;
             indicator.Location = new Point((int)indicatorX, (int)indicatorY);
             rightPanel.Controls.Add(indicator);
-            indicator.BringToFront(); 
-            
+            indicator.BringToFront();
+
             // Configurar el Label
             indicatorLabel.Text = "Aún no hay registros.";
             indicatorLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -1456,7 +1462,7 @@ namespace TecnogadgedWin7
             indicatorLabel.AutoSize = true;
             float labelX = dataGridView.Location.X + (dataGridView.Width - indicatorLabel.Width) / 2.0f;
             float labelY = indicator.Bottom + 10;
-            indicatorLabel.Location = new Point((int)labelX, (int)labelY); 
+            indicatorLabel.Location = new Point((int)labelX, (int)labelY);
             rightPanel.Controls.Add(indicatorLabel);
             indicatorLabel.BringToFront();
 
@@ -1475,27 +1481,27 @@ namespace TecnogadgedWin7
             dateOptionSelector.SelectedIndex = 0; // Establecer "Ninguna fecha" como opción predeterminada
             dateOptionSelector.SelectedIndexChanged += new EventHandler(FilterButton_Click!);
             rightPanel.Controls.Add(dateOptionSelector);
-            
+
             // Manejar el evento SelectedIndexChanged para mostrar u ocultar el DateTimePicker
             dateOptionSelector.SelectedIndexChanged += (sender, e) =>
             {
                 if (dateOptionSelector.SelectedItem.ToString() == "Filtrar por fecha de reparación" || dateOptionSelector.SelectedItem.ToString() == "Filtrar por fecha recibido" || dateOptionSelector.SelectedItem.ToString() == "Filtrar por fecha de entrega")
                 {
-                    dateRepairedFilter.Visible = true;
+                    dateStartOfRange.Visible = true;
                 }
                 else
                 {
-                    dateRepairedFilter.Visible = false;
+                    dateStartOfRange.Visible = false;
                 }
             };
-            
+
             // Configurar el DateTimePicker para el filtrado de las 3 tipos de fechas
-            dateRepairedFilter.Location = new Point(450, 120); // Ajustar la posición del DateTimePicker
-            dateRepairedFilter.ForeColor = Color.White;
-            dateRepairedFilter.CalendarForeColor = Color.FromArgb(31, 30, 68);
-            dateRepairedFilter.Visible = false; // Ocultar el DateTimePicker por defecto
-            dateRepairedFilter.ValueChanged += new EventHandler(FilterButton_Click!);
-            rightPanel.Controls.Add(dateRepairedFilter);        
+            dateStartOfRange.Location = new Point(450, 120); // Ajustar la posición del DateTimePicker
+            dateStartOfRange.ForeColor = Color.White;
+            dateStartOfRange.CalendarForeColor = Color.FromArgb(31, 30, 68);
+            dateStartOfRange.Visible = false; // Ocultar el DateTimePicker por defecto
+            dateStartOfRange.ValueChanged += new EventHandler(FilterButton_Click!);
+            rightPanel.Controls.Add(dateStartOfRange);
 
             // Boton para filtrar los datos
             rightPanel.Controls.Add(slopeButton);
@@ -1650,10 +1656,10 @@ namespace TecnogadgedWin7
                     {
                         // Instanciar la clase DbConnect y ejecutar las consultas de eliminación
                         DbConnect dbConnect = new DbConnect();
-                       // Eliminar registros de la tabla daily_report
+                        // Eliminar registros de la tabla daily_report
                         string queryReport = "DELETE FROM daily_report";
                         dbConnect.ExecuteQuery(queryReport);
- 
+
                         // Eliminar registros de la tabla report_per_week
                         string queryReportPerWeek = "DELETE FROM report_per_week";
                         dbConnect.ExecuteQuery(queryReportPerWeek);
@@ -1665,8 +1671,8 @@ namespace TecnogadgedWin7
                         // Eliminar registros de la tabla employees
                         string queryPerson = "DELETE FROM employees";
                         dbConnect.ExecuteQuery(queryPerson);
-                                            
-                                        
+
+
 
                         // Actualizar el DataGridView después de limpiar la base de datos
                         GetAllRegisters(null!, null!);
@@ -1757,9 +1763,9 @@ namespace TecnogadgedWin7
                 MessageBox.Show("Credenciales incorrectas. No tiene permiso para realizar esta acción.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-       //--------------------------------------------------------------------
-       
-       //Obtener los datos del empleado seleccionado
+        //--------------------------------------------------------------------
+
+        //Obtener los datos del empleado seleccionado
         private void EmployeeSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             GetAllWeeklyReportsPerEmployee();
@@ -1777,10 +1783,10 @@ namespace TecnogadgedWin7
                 string[] fechas = selectedReport.Split(new string[] { " a " }, StringSplitOptions.None);
                 DateTime startDate = DateTime.ParseExact(fechas[0], "dd 'de' MMMM 'del' yyyy", new System.Globalization.CultureInfo("es-ES"));
                 DateTime endDate = DateTime.ParseExact(fechas[1], "dd 'de' MMMM 'del' yyyy", new System.Globalization.CultureInfo("es-ES"));
-        
+
                 int getIdEmployee = GetIdEmployeeByName(employeeSelector.SelectedItem.ToString());
                 int idWeeklyReport = GetIdWeeklyReport(startDate, endDate, getIdEmployee);
-        
+
                 // Desuscribirse del evento CellClick antes de actualizar la tabla
                 if (cellClickHandler != null)
                 {
@@ -1824,7 +1830,7 @@ namespace TecnogadgedWin7
                 using (MySqlCommand cmd = new MySqlCommand(queryGetIdEmployee, dbConnect.Connection))
                 {
                     cmd.Parameters.AddWithValue("@name", name);
-        
+
                     dbConnect.OpenConnection();
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -1840,7 +1846,7 @@ namespace TecnogadgedWin7
             {
                 MessageBox.Show($"Error al obtener el ID del empleado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        
+
             return idEmpleado;
         }
         public void GetAllWeeklyReportsPerEmployee()
@@ -1852,14 +1858,14 @@ namespace TecnogadgedWin7
                     // MessageBox.Show("Por favor, seleccione un empleado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-        
+
                 string employeeName = employeeSelector.SelectedItem.ToString();
-                int id_employee = GetIdEmployeeByName(employeeName); 
+                int id_employee = GetIdEmployeeByName(employeeName);
                 DbConnect dbConnect = new DbConnect();
                 string queryGetWeeklyReport = "SELECT fecha_inicio, fecha_final FROM report_per_week WHERE id_empleado = @id_employee";
                 using (MySqlCommand cmd = new MySqlCommand(queryGetWeeklyReport, dbConnect.Connection))
                 {
-                    cmd.Parameters.AddWithValue("@id_employee", id_employee);  
+                    cmd.Parameters.AddWithValue("@id_employee", id_employee);
                     dbConnect.OpenConnection();
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -1871,10 +1877,10 @@ namespace TecnogadgedWin7
                             string fechaFormateada = $"{fechaInicio.ToString("dd 'de' MMMM 'del' yyyy", new System.Globalization.CultureInfo("es-ES"))} a {fechaFinal.ToString("dd 'de' MMMM 'del' yyyy", new System.Globalization.CultureInfo("es-ES"))}";
                             reportes.Add(fechaFormateada);
                         }
-        
+
                         // Invertir la lista de reportes
                         reportes.Reverse();
-        
+
                         // Limpiar los elementos del ComboBox y agregar los reportes en orden inverso
                         reportPerWeekSelector.Items.Clear();
                         reportPerWeekSelector.Items.Add("Selecciona un reporte");
@@ -1905,7 +1911,7 @@ namespace TecnogadgedWin7
                     cmd.Parameters.AddWithValue("@startDate", startDate);
                     cmd.Parameters.AddWithValue("@endDate", endDate);
                     cmd.Parameters.AddWithValue("@idEmployee", idEmployee);
-        
+
                     dbConnect.OpenConnection();
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -1915,14 +1921,14 @@ namespace TecnogadgedWin7
                         }
                     }
                     dbConnect.CloseConnection();
-                  
+
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al obtener el ID del reporte semanal: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        
+
             return idWeeklyReport;
         }
         public void GetAllDailyReportsByIdWeeklyReport(int idReport)
@@ -1939,7 +1945,7 @@ namespace TecnogadgedWin7
                     {
                         dailyReportTable.Rows.Clear(); // Limpiar los elementos de la tabla
                         decimal totalComision = 0; // Variable para almacenar el total de la comisión
-        
+
                         int rowIndex = 0;
                         while (reader.Read())
                         {
@@ -1950,19 +1956,19 @@ namespace TecnogadgedWin7
                             decimal manoObra = reader.GetDecimal("mano_obra");
                             decimal comisionEmpleado = reader.GetDecimal("comision_empleado");
                             DateTime fechaCapturada = reader.GetDateTime("fecha_capturada");
-        
+
                             // Formatear la fecha capturada
                             string amPm = fechaCapturada.Hour >= 12 ? "PM" : "AM";
                             string fechaCapturadaFormateada = fechaCapturada.ToString("dd 'de' MMMM 'del' yyyy 'a las' hh:mm", new System.Globalization.CultureInfo("es-ES")) + " " + amPm;
-        
+
                             // Formatear los valores monetarios
                             string ingresoGeneradoFormateado = ingresoGenerado.ToString("C", new System.Globalization.CultureInfo("es-MX"));
                             string costoRefaccionFormateado = costoRefaccion.ToString("C", new System.Globalization.CultureInfo("es-MX"));
                             string manoObraFormateado = manoObra.ToString("C", new System.Globalization.CultureInfo("es-MX"));
                             string comisionEmpleadoFormateado = comisionEmpleado.ToString("C", new System.Globalization.CultureInfo("es-MX"));
-        
+
                             dailyReportTable.Rows.Add(idReporteDiario, dia, ingresoGeneradoFormateado, costoRefaccionFormateado, manoObraFormateado, comisionEmpleadoFormateado, fechaCapturadaFormateada);
-        
+
                             // Aplicar estilo a las filas pares
                             if (rowIndex % 2 == 0)
                             {
@@ -1970,16 +1976,16 @@ namespace TecnogadgedWin7
                                 row.DefaultCellStyle.BackColor = Color.LightSkyBlue;
                                 row.DefaultCellStyle.ForeColor = Color.Black;
                             }
-        
+
                             // Sumar la comisión del empleado al total
                             totalComision += comisionEmpleado;
                             rowIndex++;
                         }
-        
+
                         // Agregar una fila al final con el total de la comisión
                         string totalComisionFormateado = totalComision.ToString("C", new System.Globalization.CultureInfo("es-MX"));
                         int totalRowIndex = dailyReportTable.Rows.Add(null, null, null, null, "Total Comisión", totalComisionFormateado);
-        
+
                         // Aplicar estilo a la fila de total
                         DataGridViewRow totalRow = dailyReportTable.Rows[totalRowIndex];
                         totalRow.Cells["LaborCost"].Style.ForeColor = Color.Green;
@@ -1989,7 +1995,7 @@ namespace TecnogadgedWin7
                     }
                     dbConnect.CloseConnection();
                 }
-        
+
                 // Manejar los eventos
                 dailyReportTable.CellClick -= cellClickHandler!;
                 dailyReportTable.CellClick += new DataGridViewCellEventHandler(cellClickHandler!);
@@ -2038,7 +2044,7 @@ namespace TecnogadgedWin7
                 {
                     if (customerForm.ShowDialog(this) == DialogResult.OK)
                     {
-                    
+
                     }
                 }
             }
@@ -2050,16 +2056,16 @@ namespace TecnogadgedWin7
         private void OpenRepairFormButton_Click(object sender, EventArgs e, int id, string name, string tipoDispositivo, string brand, string model, string problem, string statusNow, string fechaEntregar, string comentarios)
         {
             using (RepairDeviceModal customerForm = new RepairDeviceModal(
-                this, 
-                id: id, 
-                name: name, 
-                tipoDispositivo: tipoDispositivo, 
-                brand: brand, 
-                model: model, 
-                problem: problem, 
-                statusNow: statusNow, 
+                this,
+                id: id,
+                name: name,
+                tipoDispositivo: tipoDispositivo,
+                brand: brand,
+                model: model,
+                problem: problem,
+                statusNow: statusNow,
                 fechaEntregar: fechaEntregar,
-                comment: comentarios)) 
+                comment: comentarios))
             {
                 customerForm.ShowDialog(Form1.ActiveForm);
             }
@@ -2067,19 +2073,19 @@ namespace TecnogadgedWin7
         private void OpenConfirmDeliverdFinished_Click(object sender, EventArgs e, int id, string name, string tipoDispositivo, string brand, string model, string problem, string statusNow, string fechaReparado, string costo, string diagnostico, string personaReparo, string personaRecibio, string fechaRecibido, string comentarios, string refaccion)
         {
             using (ConfirmFinishDelivered customerForm = new ConfirmFinishDelivered(
-                this, 
-                id: id, 
-                name: name, 
-                tipo_dispositivo: tipoDispositivo, 
-                brand: brand, 
-                model: model, 
-                problem: problem, 
-                status: statusNow, 
-                fechaReparado: fechaReparado, 
-                costo: costo, 
-                diagnostico: diagnostico, 
-                personaReparo: personaReparo, 
-                personaRecibio: personaRecibio, 
+                this,
+                id: id,
+                name: name,
+                tipo_dispositivo: tipoDispositivo,
+                brand: brand,
+                model: model,
+                problem: problem,
+                status: statusNow,
+                fechaReparado: fechaReparado,
+                costo: costo,
+                diagnostico: diagnostico,
+                personaReparo: personaReparo,
+                personaRecibio: personaRecibio,
                 fechaRecibido: fechaRecibido,
                 comment: comentarios, // Nuevo campo
                 refaccion: refaccion))   // Nuevo campo
@@ -2090,17 +2096,17 @@ namespace TecnogadgedWin7
         private void OpenDeliveredToLaboratoryModalButton_Click(object sender, EventArgs e, int id, string name, string brand, string model, string status, string problem, string fechaRecibido, string fechaEntregar, string comentarios)
         {
             using (DeliveredToLaboratoryModal deliveredModal = new DeliveredToLaboratoryModal(
-                this, 
-                id, 
-                name, 
-                brand, 
-                model, 
-                status, 
-                problem, 
-                fechaRecibido, 
+                this,
+                id,
+                name,
+                brand,
+                model,
+                status,
+                problem,
+                fechaRecibido,
                 fechaEntregar,
                 comentarios
-                )) 
+                ))
             {
                 deliveredModal.ShowDialog(Form1.ActiveForm);
             }
@@ -2111,12 +2117,12 @@ namespace TecnogadgedWin7
             if (result == DialogResult.Yes)
             {
                 DbConnect dbConnect = new DbConnect();
-        
+
                 string query = $"UPDATE customers SET estatus = 'ENTREGADO' WHERE id = {id}";
                 dbConnect.ExecuteQuery(query);
-        
+
                 GetFilterRegisters(filter.Text, search.Text);
-        
+
                 MessageBox.Show("El dispositivo se entregó", "Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -2183,9 +2189,9 @@ namespace TecnogadgedWin7
                 MessageBox.Show("Entrega realizada con éxito", "Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        
-       
-       
+
+
+
         // Si el usuario presiona la tecla ENTER en el campo de busqueda se ejecutara el evento FilterButton_Click
         private void Search_KeyDown(object sender, KeyEventArgs e)
         {
@@ -2194,7 +2200,7 @@ namespace TecnogadgedWin7
                 FilterButton_Click(sender, e);
             }
         }
-       
+
         public void ExecutePeriodicTask()
         {
             // Aquí va el código que deseas ejecutar cada minuto

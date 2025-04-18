@@ -217,7 +217,7 @@ namespace TecnogadgedWin7
             commentTextBox.Font = new Font("Arial", 12, FontStyle.Regular);
             commentTextBox.ForeColor = Color.Gray;
             commentTextBox.Location = new Point(puntoXLabels, 420);
-            commentTextBox.Size = new Size(250, 170);
+            commentTextBox.Size = new Size(250, 100);
             commentTextBox.Multiline = true;
             commentTextBox.ScrollBars = ScrollBars.Vertical;
             commentTextBox.ReadOnly = true;
@@ -232,40 +232,40 @@ namespace TecnogadgedWin7
             commentIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(commentIcon);
 
-            // Subtítulo y valor del fecha de entrega
+                        // Subtítulo y valor del fecha de entrega
             Label deliveryDateSubtitle = new Label();
             deliveryDateSubtitle.Text = "Fecha de entrega:";
             deliveryDateSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
             deliveryDateSubtitle.ForeColor = Color.Black;
-            deliveryDateSubtitle.Location = new Point(puntoXLabels, 600);
+            deliveryDateSubtitle.Location = new Point(puntoXLabels, 550); // Subido 50 px
             deliveryDateSubtitle.Size = new Size(200, 20);
             leftPanel.Controls.Add(deliveryDateSubtitle);
-
+            
             Label deliveryDateLabel = new Label();
             deliveryDateLabel.Text = fechaFormateada;
             deliveryDateLabel.Font = new Font("Arial", 12, FontStyle.Regular);
             deliveryDateLabel.ForeColor = Color.Black;
-            deliveryDateLabel.Location = new Point(puntoXLabels, 620);
+            deliveryDateLabel.Location = new Point(puntoXLabels, 570); // Subido 50 px
             deliveryDateLabel.Size = new Size(200, 20);
             leftPanel.Controls.Add(deliveryDateLabel);
-
+            
             // Icono de la fecha de entrega
             IconPictureBox deliveryDateIcon = new IconPictureBox();
             deliveryDateIcon.IconChar = IconChar.CalendarAlt;
             deliveryDateIcon.IconColor = Color.FromArgb(31, 30, 68);
-            deliveryDateIcon.Location = new Point(puntoXIcons, 600);
+            deliveryDateIcon.Location = new Point(puntoXIcons, 550); // Subido 50 px
             deliveryDateIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(deliveryDateIcon);
-
+            
             // Subtítulo y valor de hora de entrega
             Label deliveryTimeSubtitle = new Label();
             deliveryTimeSubtitle.Text = "Hora de entrega:";
             deliveryTimeSubtitle.Font = new Font("Arial", 12, FontStyle.Bold);
             deliveryTimeSubtitle.ForeColor = Color.Black;
-            deliveryTimeSubtitle.Location = new Point(puntoXLabels, 670);
+            deliveryTimeSubtitle.Location = new Point(puntoXLabels, 620); // Subido 50 px
             deliveryTimeSubtitle.Size = new Size(200, 20);
             leftPanel.Controls.Add(deliveryTimeSubtitle);
-
+            
             Label deliveryTimeLabel = new Label();
             DateTime hora;
             if (DateTime.TryParse(fechaHora[1], out hora))
@@ -279,15 +279,15 @@ namespace TecnogadgedWin7
             }
             deliveryTimeLabel.Font = new Font("Arial", 12, FontStyle.Regular);
             deliveryTimeLabel.ForeColor = Color.Black;
-            deliveryTimeLabel.Location = new Point(puntoXLabels, 690);
+            deliveryTimeLabel.Location = new Point(puntoXLabels, 640); // Subido 50 px
             deliveryTimeLabel.Size = new Size(200, 20);
             leftPanel.Controls.Add(deliveryTimeLabel);
-
+            
             // Icono de la hora de entrega
             IconPictureBox deliveryTimeIcon = new IconPictureBox();
             deliveryTimeIcon.IconChar = IconChar.Clock;
             deliveryTimeIcon.IconColor = Color.FromArgb(31, 30, 68);
-            deliveryTimeIcon.Location = new Point(puntoXIcons, 670);
+            deliveryTimeIcon.Location = new Point(puntoXIcons, 620); // Subido 50 px
             deliveryTimeIcon.Size = new Size(32, 32);
             leftPanel.Controls.Add(deliveryTimeIcon);
 
@@ -483,7 +483,7 @@ namespace TecnogadgedWin7
             updateButton.ForeColor = Color.White;
             updateButton.BackColor = Color.FromArgb(31, 30, 68);
             updateButton.FlatStyle = FlatStyle.Flat;
-            updateButton.Location = new Point(420, 680);
+            updateButton.Location = new Point(420, 630);
             updateButton.Size = new Size(200, 50);
             updateButton.Click += new EventHandler(PutARegister!);
             leftPanel.Controls.Add(updateButton);

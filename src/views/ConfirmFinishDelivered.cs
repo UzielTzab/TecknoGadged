@@ -28,7 +28,7 @@ namespace TecnogadgedWin7
 
         List<string> personalNames = new List<string>();
 
-       public ConfirmFinishDelivered(Form1 form, int id, string name, string tipo_dispositivo, string brand, string model, string status, string problem, string fechaReparado, string costo, string diagnostico, string personaReparo, string personaRecibio, string fechaRecibido, string comment, string refaccion)
+        public ConfirmFinishDelivered(Form1 form, int id, string name, string tipo_dispositivo, string brand, string model, string status, string problem, string fechaReparado, string costo, string diagnostico, string personaReparo, string personaRecibio, string fechaRecibido, string comment, string refaccion)
         {
             GetPersonalNames();
             string[] fechaHora = fechaRecibido.Split(' ');
@@ -325,7 +325,7 @@ namespace TecnogadgedWin7
             {
                 fechaReparadoFormateada = fechaReparadoDate.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-ES"));
             }
-            
+
             // Combinar fecha y hora formateadas
             Label fechaReparadoLabel = new Label();
             fechaReparadoLabel.Text = $"{fechaReparadoFormateada}";
@@ -431,8 +431,8 @@ namespace TecnogadgedWin7
             sendButton.BackColor = Color.FromArgb(31, 30, 68);
             sendButton.FlatStyle = FlatStyle.Flat;
             sendButton.FlatAppearance.BorderSize = 0;
-            sendButton.Location = new Point(160, 650);
-            sendButton.Size = new Size(250, 40);
+            sendButton.Location = new Point(100, 640); // Ajustar posición horizontal
+            sendButton.Size = new Size(200, 40); // Ajustar tamaño
             sendButton.Click += new EventHandler(PutARegister!);
             leftPanel.Controls.Add(sendButton);
 
@@ -443,8 +443,8 @@ namespace TecnogadgedWin7
             printButton.BackColor = Color.FromArgb(31, 30, 68);
             printButton.FlatStyle = FlatStyle.Flat;
             printButton.FlatAppearance.BorderSize = 0;
-            printButton.Location = new Point(160, 700);
-            printButton.Size = new Size(250, 40);
+            printButton.Location = new Point(320, 640); // Colocar al lado del botón de enviar
+            printButton.Size = new Size(200, 40); // Ajustar tamaño
             printButton.Click += new EventHandler(PrintInvoice!);
             leftPanel.Controls.Add(printButton);
         }
@@ -530,11 +530,21 @@ namespace TecnogadgedWin7
         {
             try
             {
+                DialogResult result = MessageBox.Show(
+                    "¿Está seguro de que desea entregar el equipo? Una vez entregado, no podrá imprimir la factura.",
+                    "Confirmar entrega",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (result != DialogResult.Yes)
+                {
+                    return;
+                }
+
                 DbConnect dbConnect = new DbConnect();
-                // Fecha de ingreso automática
                 String date_brought = DateTime.Now.ToString("yyyy-MM-dd");
 
-                // Asegúrate de que 'id' tenga un valor válido
                 if (id <= 0)
                 {
                     throw new Exception("ID no válido.");

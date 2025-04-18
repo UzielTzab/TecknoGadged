@@ -312,6 +312,41 @@ namespace TecnogadgedWin7
             timeIcon.BackColor = Color.Transparent;
             leftPanel.Controls.Add(timeIcon);
 
+            // //Texto para el campo de precio
+            // Label priceText = new Label();
+            // priceText.Text = "Precio";
+            // priceText.Font = new Font("Arial", 12, FontStyle.Regular);
+            // priceText.ForeColor = Color.Black;
+            // priceText.Location = new Point(300, 220);
+            // priceText.Size = new Size(100, 20);
+            // leftPanel.Controls.Add(priceText);
+
+            // // Campo de precio
+            // TextBox price = new TextBox();
+            // price.ForeColor = Color.White;
+            // price.Location = new Point(300, 250);
+            // price.Size = new Size(200, 50);
+            // price.BackColor = Color.FromArgb(31, 30, 68);
+            // price.BorderStyle = BorderStyle.FixedSingle;
+            // price.Font = new Font("Arial", 12, FontStyle.Regular);
+            // price.TextAlign = HorizontalAlignment.Center;
+            // price.MaxLength = 10;
+            // leftPanel.Controls.Add(price);
+
+            // // Icono para el campo de precio    
+            // IconPictureBox priceIcon = new IconPictureBox();
+            // priceIcon.IconChar = IconChar.MoneyBillWave;
+            // priceIcon.IconColor = Color.FromArgb(31, 30, 68);
+            // priceIcon.Location = new Point(260, 250);
+            // priceIcon.Size = new Size(32, 32);
+            // priceIcon.BackColor = Color.Transparent;
+            // leftPanel.Controls.Add(priceIcon);
+
+
+
+
+
+
             // Botón de guardar
             Button saveButton = new Button();
             saveButton.Text = "Guardar";
@@ -324,7 +359,7 @@ namespace TecnogadgedWin7
             saveButton.Click += new EventHandler(SaveData);
             leftPanel.Controls.Add(saveButton);
         }
-              private void SaveData(object sender, EventArgs e)
+        private void SaveData(object sender, EventArgs e)
         {
             // Antes de insertar los datos en la tabla, se valida que los campos no estén vacíos
             if (string.IsNullOrWhiteSpace(brand.Text) || string.IsNullOrWhiteSpace(name.Text) || string.IsNullOrWhiteSpace(phone.Text) || string.IsNullOrWhiteSpace(model.Text) || string.IsNullOrWhiteSpace(reason.Text) || string.IsNullOrWhiteSpace(datePicker.Text) || string.IsNullOrWhiteSpace(timePicker.Text))
@@ -332,32 +367,37 @@ namespace TecnogadgedWin7
                 MessageBox.Show("Por favor, llene todos los campos", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-        
-            if (status != "ATRASADO" && status != "PENDIENTE")
+
+            if (status == "ENTREGADO")
             {
-                MessageBox.Show($"No puedes actualizar la fecha de entrega. El estado actual es: {status} para actualizar la fecha el registro debe tener un estado de PENDIENTE O ATRASADO", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show($"No puedes actualizar la fecha de entrega cuando el estado es: {status}", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-        
+
             try
             {
                 DbConnect dbConnect = new DbConnect();
-                // Fecha de ingreso automática
                 string date_brought = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        
-                // Tomar la fecha y hora para crear la fecha de entrega
+
+
                 DateTime Date = datePicker.Value;
                 DateTime Time = timePicker.Value;
-        
-                // Fusionar fecha y hora de entrega
+
                 DateTime deliveryDateTime = Date.Date.Add(Time.TimeOfDay);
-        
-                // Determinar el estatus basado en la fecha de entrega
-                string newStatus = deliveryDateTime > DateTime.Now ? "PENDIENTE" : "ATRASADO";
-        
-                // Query para actualizar datos en la tabla
+
+                string newStatus;
+
+                if (status == "EN LABORATORIO" || status == "REPARADO")
+                {
+                    newStatus = status; 
+                }
+                else
+                {
+                    newStatus = deliveryDateTime > DateTime.Now ? "PENDIENTE" : "ATRASADO";
+                }
+
                 string query = "UPDATE customers SET nombre = @nombre, telefono = @telefono, marca = @marca, modelo = @modelo, motivo = @motivo, fecha_entregar = @fecha_entregar, estatus = @estatus, comentarios = @comentarios WHERE nombre = @oldNombre AND telefono = @oldTelefono AND marca = @oldMarca AND modelo = @oldModelo AND motivo = @oldMotivo";
-        
+
                 using (MySqlCommand cmd = new MySqlCommand(query, dbConnect.Connection))
                 {
                     cmd.Parameters.AddWithValue("@nombre", name.Text);
@@ -373,17 +413,16 @@ namespace TecnogadgedWin7
                     cmd.Parameters.AddWithValue("@oldMarca", marca);
                     cmd.Parameters.AddWithValue("@oldModelo", modelo);
                     cmd.Parameters.AddWithValue("@oldMotivo", motivo);
-        
+
                     dbConnect.OpenConnection();
                     cmd.ExecuteNonQuery();
                     dbConnect.CloseConnection();
                 }
-        
-                // Obtener el valor del filtro desde la clase MainForm
+
                 string filterValue = mainForm.GetFilterValue();
                 string searchValue = mainForm.GetSearchValue();
                 mainForm.GetFilterRegisters(filterValue, searchValue);
-        
+
                 MessageBox.Show("Registro de cliente actualizado exitosamente", "Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CloseModal(sender, e);
             }
@@ -398,7 +437,7 @@ namespace TecnogadgedWin7
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x80; 
+                cp.ExStyle |= 0x80;
                 return cp;
             }
         }
