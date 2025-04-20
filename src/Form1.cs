@@ -241,8 +241,6 @@ namespace TecnogadgedWin7
             leftPanel.Controls.Add(sizeBox2);
 
 
-
-
             //----------------------------------------------------Cuerpo del panel derecho----------------------------------------------
 
             //Titulo del negocio
@@ -290,20 +288,19 @@ namespace TecnogadgedWin7
                 }
             };
 
-            // Configurar el DateTimePicker para el filtrado de las 3 tipos de fechas
-            dateStartOfRange.Location = new Point(460, 120); // Ajustar la posición del DateTimePicker
+            // DatePicker Inicial
+            dateStartOfRange.Location = new Point(460, 120);
             dateStartOfRange.ForeColor = Color.White;
             dateStartOfRange.CalendarForeColor = Color.FromArgb(31, 30, 68);
             dateStartOfRange.Visible = false; // Ocultar el DateTimePicker por defecto
             dateStartOfRange.ValueChanged += new EventHandler(FilterButton_Click!);
             rightPanel.Controls.Add(dateStartOfRange);
 
-
-            // Configurar el DateTimePicker para el filtrado de las 3 tipos de fechas
-            dateFinalOfRange.Location = new Point(460, 140); // Ajustar la posición del DateTimePicker
+            // DatePicker final
+            dateFinalOfRange.Location = new Point(460, 140);
             dateFinalOfRange.ForeColor = Color.White;
             dateFinalOfRange.CalendarForeColor = Color.FromArgb(31, 30, 68);
-            dateFinalOfRange.Visible = false; // Ocultar el DateTimePicker por defecto
+            dateFinalOfRange.Visible = false;
             dateFinalOfRange.ValueChanged += new EventHandler(FilterButton_Click!);
             rightPanel.Controls.Add(dateFinalOfRange);
 
