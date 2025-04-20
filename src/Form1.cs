@@ -2006,6 +2006,16 @@ namespace TecnogadgedWin7
 
         private void FilterButton_Click(object sender, EventArgs e)
         {
+            // Validar que la fecha inicial no sea mayor que la fecha final si los DateTimePicker están visibles
+            if (dateStartOfRange.Visible && dateFinalOfRange.Visible)
+            {
+                if (dateStartOfRange.Value.Date > dateFinalOfRange.Value.Date)
+                {
+                    MessageBox.Show("La fecha inicial no puede ser mayor que la fecha final.", "Error de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             string selectedFilter = filter.SelectedItem?.ToString()!;
 
             if (string.IsNullOrEmpty(selectedFilter))
@@ -2014,7 +2024,7 @@ namespace TecnogadgedWin7
                 return;
             }
 
-
+            // Ejecutar el filtrado con los valores válidos
             GetFilterRegisters(selectedFilter, search.Text);
         }
         private void OpenUpdateDate_Click(DateTime startDate, DateTime endDate, int id)
