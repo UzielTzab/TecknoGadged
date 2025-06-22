@@ -2161,7 +2161,7 @@ namespace TecnogadgedWin7
             // Preguntar al usuario si está seguro de eliminar el registro
             DialogResult result = MessageBox.Show("¿Está seguro de que desea eliminar este cliente?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            if (result == DialogResult.Yes)
+            if (result == DialogResult.Yes && User == "Admin" && Password == "Admin@123")
             {
                 // Instanciar la clase DbConnect y ejecutar la consulta de eliminación
                 DbConnect dbConnect = new DbConnect();
@@ -2172,6 +2172,10 @@ namespace TecnogadgedWin7
                 GetFilterRegisters(filter.Text, search.Text);
 
                 MessageBox.Show("Se eliminó correctamente el cliente", "Registro", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("No tienes permisos para eliminar registros", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
